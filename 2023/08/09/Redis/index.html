@@ -20,30 +20,37 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="There is no royal road to learning">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="Redis基础使用NoSQL特性 数据结构：数据往往以非结构化的方式存储 数据关联：无关联的 查询方式：非SQL语句查询 事务特性：无法满足ACID，而是BASE 存储方式：内存 拓展性：水平  Redis特性基于内存的键值型NoSQL数据库。  键值型，value支持多种不同数据结构，功能丰富； 单线程，每个命令具备原子性 低延迟，速度快（基于内存、IO多路复用、良好的编码） 支持数据持久化 支">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis">
+<meta property="og:url" content="http://example.com/2023/08/09/Redis/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="There is no royal road to learning">
+<meta property="og:description" content="Redis基础使用NoSQL特性 数据结构：数据往往以非结构化的方式存储 数据关联：无关联的 查询方式：非SQL语句查询 事务特性：无法满足ACID，而是BASE 存储方式：内存 拓展性：水平  Redis特性基于内存的键值型NoSQL数据库。  键值型，value支持多种不同数据结构，功能丰富； 单线程，每个命令具备原子性 低延迟，速度快（基于内存、IO多路复用、良好的编码） 支持数据持久化 支">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://rxvukhxe6.hn-bkt.clouddn.com/%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95.png">
+<meta property="og:image" content="http://rxvukhxe6.hn-bkt.clouddn.com/%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98.png">
+<meta property="og:image" content="http://rxvukhxe6.hn-bkt.clouddn.com/%E4%BA%92%E6%96%A5%E9%94%81.png">
+<meta property="og:image" content="http://rxvukhxe6.hn-bkt.clouddn.com/%E9%80%BB%E8%BE%91%E8%BF%87%E6%9C%9F.png">
+<meta property="article:published_time" content="2023-08-09T11:53:07.102Z">
+<meta property="article:modified_time" content="2023-08-24T06:37:05.402Z">
 <meta property="article:author" content="MANVND">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://rxvukhxe6.hn-bkt.clouddn.com/%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95.png">
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2023/08/09/Redis/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Hexo</title>
+  <title>redis | Hexo</title>
   
 
 
@@ -141,9 +148,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
@@ -159,10 +167,9 @@
       <meta itemprop="name" content="Hexo">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/08/09/Redis/" class="post-title-link" itemprop="url">redis</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          redis
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -192,7 +199,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Redis基础使用"><a href="#Redis基础使用" class="headerlink" title="Redis基础使用"></a>Redis基础使用</h1><h2 id="NoSQL特性"><a href="#NoSQL特性" class="headerlink" title="NoSQL特性"></a>NoSQL特性</h2><ul>
+        <h1 id="Redis基础使用"><a href="#Redis基础使用" class="headerlink" title="Redis基础使用"></a>Redis基础使用</h1><h2 id="NoSQL特性"><a href="#NoSQL特性" class="headerlink" title="NoSQL特性"></a>NoSQL特性</h2><ul>
 <li>数据结构：数据往往以非结构化的方式存储</li>
 <li>数据关联：无关联的</li>
 <li>查询方式：非SQL语句查询</li>
@@ -874,409 +881,30 @@
 <li>有消息确认机制，保证消息至少被消费一次</li>
 </ul>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/21/Spring/">
+        
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="MANVND">
-      <meta itemprop="description" content="There is no royal road to learning">
-    </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/07/21/Spring/" class="post-title-link" itemprop="url">SpringFrame</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-07-21 14:09:32" itemprop="dateCreated datePublished" datetime="2023-07-21T14:09:32+08:00">2023-07-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-24 14:31:07" itemprop="dateModified" datetime="2023-08-24T14:31:07+08:00">2023-08-24</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="传统JavaWeb开发困惑与解决方案"><a href="#传统JavaWeb开发困惑与解决方案" class="headerlink" title="传统JavaWeb开发困惑与解决方案"></a>传统JavaWeb开发困惑与解决方案</h1><ol>
-  <li>传统JavaWeb开发耦合度太高。<br>解决思路：程序代码不自己创建对象，而是第三方创建对象 </li>
-  <li>通用的事务功能耦合在业务代码中，通用的日志功能耦合在业务代码中<br>解决思路：第三方返回需要Bean对象的代理对象</li>
-</ol>
-
-<h1 id="三种思想"><a href="#三种思想" class="headerlink" title="三种思想"></a>三种思想</h1><ol>
-  <li>Ioc思想：Inversion of Control，控制反转，强调的是原本在程序中创建Bean的权利反转给第三方</li>
-  <li>DI思想：Dependency Injection，依赖注入，强调Bean之间的关系，这种关系第三方负责去设置</li>
-  <li>AOP思想：Aspect Oriented Programming，面向切面编程，功能的横向切取，实现方式为proxy</li>
-</ol>
-
-<h1 id="Spring-Bean的配置详解"><a href="#Spring-Bean的配置详解" class="headerlink" title="Spring-Bean的配置详解"></a>Spring-Bean的配置详解</h1><p>Spring开发中主要对Bean进行配置，Bean的常用配置如下</p>
-<table>
-  <li>id，class Bean的id和全限定名配置</li>
-  <li>name 通过name设置Bean的别名，通过别名也能直接获得Bean实例</li>
-  <li>scope Bean的作用范围，BeanFactory作为容器时取值singleton和prototype</li>
-  <li>lazy-init Bean的实例化时机，是否延迟加载。BeanFactory作为容器时无效</li>
-  <li>init-method Bean实例化后自动执行的初始化方法，method指定方法名</li>
-  <li>destroy-method Bean实例销毁前的方法，method指定方法名</li>
-  <li>autowire 设置自动注入模式，常用的有按照类型byType，按照名字byName</li>
-  <li>factory-bean factory-method 指定哪个工厂Bean的哪个方法完成Bean的创建</li>
-</table>
-
-<h2 id="Bean-id"><a href="#Bean-id" class="headerlink" title="Bean-id"></a>Bean-id</h2><p>不同Bean的id不能重复，不给Bean配置idBean依然有默认id。</p>
-<h2 id="Bean-name"><a href="#Bean-name" class="headerlink" title="Bean-name"></a>Bean-name</h2><p>别名，Bean name可以有多个，不同name之间用逗号隔开；不指定id会用name替代id。</p>
-<h2 id="Bean-scope"><a href="#Bean-scope" class="headerlink" title="Bean-scope"></a>Bean-scope</h2><p>默认情况下，Spring环境Bean的作用范围有两个：Singleton和Prototype</p>
-<table>
-  <li>singleton: 单例，默认值，Spring容器创建的时候，就会进行Bean的实例化，并存储在容器内部的单例池中，每次getBean都是从单例池中获取相同的Bean实例</li>
-  <li>prototype: 原型，Spring容器初始化时不会创建Bean实例，当调用getBean时才会实例化Bean，每次getBean都会创建一个新的Bean实例</li>
-</table>
-
-<h2 id="Bean-lazy-init"><a href="#Bean-lazy-init" class="headerlink" title="Bean-lazy-init"></a>Bean-lazy-init</h2><p>当lazy-init设置为true时为延迟加载，也就是当Spring容器创建的时候，不会立刻创建Bean实例，等待用到时在创建Bean实例并存储在单例池中，后续在使用该Bean直接从单例池获取，本质上该Bean还是单例的。</p>
-<h2 id="Bean的初始化和销毁方法配置"><a href="#Bean的初始化和销毁方法配置" class="headerlink" title="Bean的初始化和销毁方法配置"></a>Bean的初始化和销毁方法配置</h2><p>Bean在实例化后，可以执行指定的初始化方法完成一些初始化的操作，Bean在销毁之前也可以执行指定的销毁方法完成一些操作。</p>
-<p>构造方法-&gt;初始化方法-&gt;销毁方法。</p>
-<p>也可以通过实现InitializingBean接口，完成Bean的初始化操作。</p>
-<h2 id="Bean的实例化设置"><a href="#Bean的实例化设置" class="headerlink" title="Bean的实例化设置"></a>Bean的实例化设置</h2><p>Spring的实例化方式主要有两种：</p>
-<table>
-  <li>构造方式实例化：底层通过构造方法对Bean进行实例化</li>
-  <li>工厂方式实例化：底层通过调用自定义的工厂方法对Bean进行实例化</li>
-</table>
-
-<p>工厂方式实例化Bean分为三种：</p>
-<table>
-  <li>静态工厂方法实例化Bean</li>
-  <li>实例工厂方法实例化Bean，先配置工厂对象，然后调用实例化的工厂对象内的方法</li>
-  <li>实现FactoryBean规范延迟实例化Bean，实现FactoryBean接口，容器自动调用实现的getObject方法</li>
-</table>
-
-<p><constructor-arg>为Bean的参数构造值</p>
-<h2 id="Bean的依赖注入配置"><a href="#Bean的依赖注入配置" class="headerlink" title="Bean的依赖注入配置"></a>Bean的依赖注入配置</h2><p>两种方式：</p>
-<table>
-  <li>通过Bean的set方法注入 property</li>
-  <li>通过构造Bean的方法进行注入 constructor-arg</li>
-</table>
-
-<p>依赖注入的数据类型有如下三种：</p>
-<table>
-  <li>普通数据类型，如：String、int、boolean等，通过value属性指定</li>
-  <li>引用数据类型，如：UserDaoImpl、DataSource等，通过ref属性置顶</li>
-  <li>集合数据类型，如：List、Map、Properties等，使用list使用子标签list，map使用子标签map，set使用子标签set，properties使用prop标签</li>
-</table>
-
-<h3 id="Bean自动装配"><a href="#Bean自动装配" class="headerlink" title="Bean自动装配"></a>Bean自动装配</h3><p>如果被注入的属性类型是Bean引用，name可以在Bean标签中使用autowire属性去配置自动注入方式，属性值有两个：</p>
-<table>
-  <li>byName：通过属性名自动装配，即去匹配setXxx与id="xxx"(name="xxx")是否一致</li>
-  <li>byType：通过Bean的类型从容器中匹配，匹配出多个相同Bean类型时，报错</li>
-</table>
-
-<h1 id="Spring的其他配置标签"><a href="#Spring的其他配置标签" class="headerlink" title="Spring的其他配置标签"></a>Spring的其他配置标签</h1><p>Spring的xml标签大体上分为两类，一种是默认标签，一种是自定义标签</p>
-<table>
-  <li>默认标签：不用额外导入其他命名空间约束的标签，例如Bean标签、Beans标签、import标签、alias标签</li>
-  <li>自定义标签：需要额外引入其他命名空间约束，并通过前缀引用的标签</li>
-</table>
-
-<h3 id="beans-profile"><a href="#beans-profile" class="headerlink" title="beans-profile"></a>beans-profile</h3><p>根据profile的值不同可以区分开发环境，使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.setProperty(&quot;&quot;);</span><br></pre></td></tr></table></figure>
-
-<p>切换开发环境。</p>
-<h3 id="beans-import"><a href="#beans-import" class="headerlink" title="beans-import"></a>beans-import</h3><p>导入其他配置文件，通常将一些小模块的配置文件导入到一个总的配置文件中。</p>
-<h3 id="beans-alias"><a href="#beans-alias" class="headerlink" title="beans-alias"></a>beans-alias</h3><p>为Bean添加别名</p>
-<h1 id="Spring的get方法"><a href="#Spring的get方法" class="headerlink" title="Spring的get方法"></a>Spring的get方法</h1><table>
-    <li>Object getBean(String beanName) 根据beanName从容器中获取Bean实例，要求容器中Bean唯一，返回值为Object，需要强转</li>
-    <li>T getBean(Class type) 根据Class类型从容器中获取Bean实例，要求容器中Bean类型唯一，返回值为Class类型实例，无需强转</li>
-    <li>T getBean(String beanName, Class type) 根据beanName从容器中获得Bean实例，返回值为Class类型实例，无需强转</li>
-</table>
-
-<h1 id="Spring配置非自定义Bean"><a href="#Spring配置非自定义Bean" class="headerlink" title="Spring配置非自定义Bean"></a>Spring配置非自定义Bean</h1><p>在pom导入包后，在相应的xml中配置Bean信息。</p>
-<h1 id="Bean实例化的基本流程"><a href="#Bean实例化的基本流程" class="headerlink" title="Bean实例化的基本流程"></a>Bean实例化的基本流程</h1><p>Spring容器在进行初始化时，会将xml配置的bean标签的<strong>信息</strong>封装成一个BeanDefinition对象，所有的BeanDefinition对象存储在一个名为<br>beanDefinitionMap的Map集合中，Spring框架在对该Map进行遍历，使用反射创建Bean实例对象，创建好的Bean对象存储在名为singletonObjects<br>的Map集合中，当调用getBean方法时最终从该Map集合中取出Bean实例对象返回。</p>
-<p>完整流程</p>
-<table>
-    <li>加载xml配置文件，解析获取配置中的每个bean信息，封装成一个个BeanDefinition对象</li>
-    <li>将BeanDefinition存储在一个名为beanDefinitionMap的Map&lt;String, BeanDefinition>中 &lt;/String></li>
-    <li>ApplicationContext底层遍历beanDefinitionMap，创建Bean实例对象</li>
-    <li>创建好的Bean实例对象，存储在一个名为singletonObjects的Map&lt;String, Object>中</li>
-    <li>当执行applicationContext.getBean(beanName)时，从singletonObject去匹配Bean实例返回</li>
-</table>
-
-<h1 id="Spring后处理器"><a href="#Spring后处理器" class="headerlink" title="Spring后处理器"></a>Spring后处理器</h1><p>Spring的后处理器时Spring对外开发的重要拓展点，允许介入到Bean的整个实例化流程，以达到动态注册BeanDefinition，动态修改BeanDefinition，<br>以及动态修改Bean的作用。Spring主要有两种后处理器：</p>
-<table>
-    <li>BeanFactoryPostProcessor: Bean工厂后处理器，在BeanDefinitionMap填充完毕，Bean实例化之前执行</li>
-    <li>BeanPostProcessor: Bean后处理器，一般在Bean实例化之后，填充到单例池singletonObjects之前执行</li>
-</table>
-
-<h2 id="Bean工厂后处理器-BeanFactoryPostProcessor"><a href="#Bean工厂后处理器-BeanFactoryPostProcessor" class="headerlink" title="Bean工厂后处理器-BeanFactoryPostProcessor"></a>Bean工厂后处理器-BeanFactoryPostProcessor</h2><p>BeanFactoryPostProcessor是一个接口规范，实现了该接口的类只要交由Spring容器管理，Spring就会回调该接口的方法，用于<br>对BeanDefinition注册和修改。</p>
-<p>BeanFactoryPostProcessor定义如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BeanFactoryPostProcessor</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">postProcessBeanFactory</span><span class="params">(ConfigurableListableBeanFactory beanFactory)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Spring提供一个BeanFactoryPostProcessor的子接口BeanDefinitionRegistryPostProcessor专门用于注册<br>BeanDefinition操作</p>
-<h2 id="Bean后处理器-BeanPostProcessor"><a href="#Bean后处理器-BeanPostProcessor" class="headerlink" title="Bean后处理器-BeanPostProcessor"></a>Bean后处理器-BeanPostProcessor</h2><p>Bean被实例化后，到最终缓存到名为singletonObjects单例池之前，中间会经过Bean的初始化过程，称为Bean后处理。<br>跟Bean工厂后处理类似，它也是一个接口，实现了该接口并被容器管理的BeanPostProcessor，会在流程节点上被Spring自动调用</p>
-<h1 id="Spring-Bean的生命周期"><a href="#Spring-Bean的生命周期" class="headerlink" title="Spring Bean的生命周期"></a>Spring Bean的生命周期</h1><p>Spring Bean的生命周期是从Bean实例化之后，即通过反射创建出对象之后，到Bean成为一个完整对象，最终存储到单例池中，<br>这个过程被称作Spring Bean的生命周期。Spring Bean的生命周期大体上分为三个阶段：</p>
-<table>
-    <li>Bean的实例化阶段：Spring框架会取出BeanDefinition的信息进行判断当前Bean的范围是否是singleton，是否是
-不延迟加载的，是否是FactoryBean等，最终将一个普通的singleton的Bean通过反射进行实例化。</li>
-    <li>Bean的初始化阶段：Bean创建之后还仅仅是“半成品”，还需要对Bean实例的属性进行填充、执行一些Aware接口方法、
-执行BeanPostProcessor方法、执行InitializingBean接口的初始化方法、执行自定义初始化init方法等。</li>
-    <li>Bean的完成阶段：经过初始化阶段后，Bean就成为了一个完整的Bean，被存储在单例池singletonObjects中去，即完成了
-Spring Bean的整个生命周期。</li>
-</table>
-
-<p>Spring Bean的初始化过程涉及如下几个过程：</p>
-<table>
-    <li>Bean实例的属性填充</li>
-    <li>Aware接口属性注入</li>
-    <li>BeanPostProcessor的before()方法回调</li>
-    <li>InitializingBean接口的初始化方法回调</li>
-    <li>自定义初始化方法init回调</li>
-    <li>BeanPostProcessor的after()方法回调</li>
-</table>
-
-<p>BeanDefinition中有对当前Bean实体的诸如信息通过属性propertyValues进行了存储。</p>
-<p>Spring在进行属性注入时，分为以下三种情况：</p>
-<table>
-    <li>注入普通属性，String、int或存储基本类型的集合时，直接通过set方法的反射设置进去</li>
-    <li>注入单向对象引用属性时，从容器中getBean获取后通过set方法反射设置进去，如果容器中没有，则先创建被注入对象
-Bean实例后，再进行诸如操作</li>
-    <li>注入双向对象引用属性，涉及循环引用</li>
-</table>
-
-<p>Bean实例属性填充<br>Spring提供了<strong>三级缓存</strong>存储完整Bean实例和半成品Bean实例，用于解决循环引用问题<br>在DefaultListableBeanFactory的上四级父类DefaultSingletonBeanRegistry中提供如下三个Map：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultSingletonBeanRegistry</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 1、最终存储单例Bean成品的容器，即实例化和初始化都完成的Bean，称为“一级缓存”</span></span><br><span class="line">    Map&lt;String, Object&gt; singletonObjects = <span class="keyword">new</span> ConcurrentHashMap(<span class="number">256</span>);</span><br><span class="line">    <span class="comment">// 2、早期Bean单例池，缓存半成品对象，且当前对象已经被其他对象引用，称为“二级缓存”</span></span><br><span class="line">    Map&lt;String, Object&gt; earlySingletonObjects = <span class="keyword">new</span> ConcurrentHashMap(<span class="number">16</span>);</span><br><span class="line">    <span class="comment">// 3、单例Bean的工厂池，缓存半成品对象，对象未被引用，使用时再通过工厂创建Bean，称之为“三级缓存”</span></span><br><span class="line">    Map&lt;String, ObjectFactory&lt;?&gt;&gt; earlySingletonObjects = <span class="keyword">new</span> ConcurrentHashMap(<span class="number">16</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>A和B循环依赖过程结合三级缓存：</p>
-<table>
-    <li>A实例化对象，但尚未初始化，将A存储在三级缓存</li>
-    <li>A属性注入，需要B，从缓存中获取，没有B</li>
-    <li>B实例化对象，但尚未初始化，将B存储在三级缓存</li>
-    <li>B属性依赖注入，需要A，从三级缓存获取A，A从三级缓存移入二级缓存</li>
-    <li>B执行其他生命周期过程，最终成为一个完整Bean，存储到一级缓存，删除二三级缓存</li>
-    <li>A注入B</li>
-    <li>A执行其他生命周期过程，最终成为一个完整Bean，存储到一级缓存，删除二三级缓存</li>
-</table>
-
-<p>常用的Aware接口</p>
-<p>Aware接口是一种框架辅助属性注入的一种思想，Aware可以注入一些底层对象</p>
-<table>
-    <li>接口：ServletContextAware 回调方法：setServletContext(ServletContext context) Spring框架回调方法注入ServletContext对象，web环境下生效</li>
-    <li>接口：BeanFactoryAware 回调方法：setBeanFactory(BeanFactory factory) Spring框架回调方法注入beanFactory对象</li>
-    <li>接口：BeanNameAware 回调方法：setBeanName(String beanName) Spring框架回调方法注入当前Bean在容器中的beanName</li>
-    <li>接口：ApplicationContextAware 回调方法：setApplicationContext(ApplicationContext application) Spring框架回调方法注入applicationContext对象</li>
-</table>
-
-<p><img src="http://rxvukhxe6.hn-bkt.clouddn.com/BeanLifeCycle.png" alt="Bean生命周期" title="Bean生命周期"></p>
-<h1 id="Spring整合MyBatis"><a href="#Spring整合MyBatis" class="headerlink" title="Spring整合MyBatis"></a>Spring整合MyBatis</h1><p>整合包里提供了一个SqlSessionFactoryBean和一个扫描Mapper的配置对象，SqlSessionFactoryBean一旦被实例化，<br>就开始扫描Mapper并通过动态代理产生Mapper的实现类存储到Spring容器中。相关的有如下四个类：</p>
-<table>
-    <li>SqlSessionFactoryBean：需要进行配置，用于提供SqlSessionFactory</li>
-    <li>MapperScannerConfigure：需要进行配置，用于扫描指定mapper注册BeanDefinition</li>
-    <li>MapperFactoryBean：Mapper的FactoryBean，获得指定Mapper时调用getObject方法</li>
-    <li>ClassPathMapperScanner：definition.setAutowireMode(2)修改了自动注入状态，所以MapperFactoryBean中的setSqlSessionFactory会自动注入进去</li>
-</table>
-
-<h1 id="Spring整合第三方框架"><a href="#Spring整合第三方框架" class="headerlink" title="Spring整合第三方框架"></a>Spring整合第三方框架</h1><table>
-    <li>将自定义标签的约束与物理约束文件与网络约束名称的约束以键值对形式存储到一个spring.schemas文件里，该文件存储在类加载路径的META-INF里，Spring会自动加载</li>
-    <li>将自定义命名空间的名称与自定义命名空间的处理器映射关系以键值对形式存在一个叫spring.handlers文件里，该文件存储在类加载路径的META-INF里，Spirng会自动加载</li>
-    <li>准备好NamespaceHandler，如果命名空间里只有一个标签，那么直接在parse方法中进行解析即可，一般解析结果就是注册该标签对应的BeanDefinition。如果命名空间里有多个标签，那么可以在init方法中为每个标签都注册一个BeanDefinitionParser，在执行NamespaceHandler的parse方法时再分流给不同的BeanDefinitionParser进行解析（重写doParse方法）</li>
-</table>
-
-<table>
-    <li>确定命名空间名称、schema虚拟路径、标签名称</li>
-    <li>编写schema约束文件***.xsd</li>
-    <li>在类加载路径下创建META-INF目录，编写约束映射文件spring.schemas和处理器映射文件spring.handlers</li>
-    <li>编写命名空间处理器，在init方法注册Parser</li>
-    <li>编写标签的解析器</li>
-    <li>在applicationContext.xml配置文件中引入命名空间</li>
-    <li>在applicationContext.xml配置文件中使用自定义的标签</li>
-</table>
-# 基于注解的Spring开发
-
-<h2 id="Bean基本注解开发"><a href="#Bean基本注解开发" class="headerlink" title="Bean基本注解开发"></a>Bean基本注解开发</h2><p>基于Bean注解，主要使用注解的方式提到原有xml的<bean>标签及其标签属性的配置</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;&quot;</span> <span class="attr">name</span>=<span class="string">&quot;&quot;</span> <span class="attr">class</span>=<span class="string">&quot;&quot;</span> <span class="attr">scope</span>=<span class="string">&quot;&quot;</span> <span class="attr">lazy-init</span>=<span class="string">&quot;&quot;</span> <span class="attr">init-method</span>=<span class="string">&quot;&quot;</span> <span class="attr">destroy-method</span>=<span class="string">&quot;&quot;</span> <span class="attr">abstract</span>=<span class="string">&quot;&quot;</span> <span class="attr">autowire</span>=<span class="string">&quot;&quot;</span> <span class="attr">factory-bean</span>=<span class="string">&quot;&quot;</span> <span class="attr">factory-method</span>=<span class="string">&quot;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>使用@Component注解替代<bean>标签</p>
-<table>
-<thead>
-<tr>
-<th>xml配置</th>
-<th align="left">注解</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><bean id="" class=""></td>
-<td align="left">@Component</td>
-<td>被该注解标识的类，会在指定扫描范围内被Spring加载并实例化</td>
-</tr>
-<tr>
-<td><bean scope=""></td>
-<td align="left">@Scope</td>
-<td>在类上或使用了@Bean注解的方法上，标注Bean的作用范围，取值为singleton或prototype</td>
-</tr>
-<tr>
-<td><bean lazy-init=""></td>
-<td align="left">@Lazy</td>
-<td>在类上或使用了@Bean注解的方法上，标注Bean是否延迟加载，取值为true和false</td>
-</tr>
-<tr>
-<td><bean init-method=""></td>
-<td align="left">@PostConstruct</td>
-<td>在方法上使用，标注Bean的实例化后执行的方法</td>
-</tr>
-<tr>
-<td><bean destroy-method=""></td>
-<td align="left">@PreDestroy</td>
-<td>在方法上使用，标注Bean的销毁前执行方法</td>
-</tr>
-</tbody></table>
-<p>由于JavaEE开发时分层的，为了每层Bean标识的注解语义化更加明确，@Component又衍生出了如下三个注解：</p>
-<table>
-<thead>
-<tr>
-<th>@Component衍生注解</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>@Repository</td>
-<td>在Dao层类上使用</td>
-</tr>
-<tr>
-<td>@Servcie</td>
-<td>在Service层类上使用</td>
-</tr>
-<tr>
-<td>@Controller</td>
-<td>在Web层类上使用</td>
-</tr>
-</tbody></table>
-<h2 id="Bean依赖注入注解开发"><a href="#Bean依赖注入注解开发" class="headerlink" title="Bean依赖注入注解开发"></a>Bean依赖注入注解开发</h2><p>Bean依赖注入的注解，主要使用注解的方式替代xml的<property>标签完成属性的注入操作。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;&quot;</span> <span class="attr">class</span>=<span class="string">&quot;&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;&quot;</span> <span class="attr">value</span>=<span class="string">&quot;&quot;</span>/&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>Spring主要提供如下注解，用于在Bean内部进行属性注入：</p>
-<table>
-<thead>
-<tr>
-<th>属性注入注解</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>@Value</td>
-<td>使用在字段或方法上，用于注入普通数据</td>
-</tr>
-<tr>
-<td>@Autowired</td>
-<td>使用在字段或方法上，用于根据类型(byType)注入引用数据</td>
-</tr>
-<tr>
-<td>@Qualifier</td>
-<td>使用在字段或方法上，结合@Autowired，根据名称注入，只在方法上使用不用结合@Autowired</td>
-</tr>
-<tr>
-<td>@Resource</td>
-<td>使用在字段或方法上，根据类型或名称进行注入</td>
-</tr>
-</tbody></table>
-<p>以上注解也可以卸载setter方法上。</p>
-<p>@Autowired 如果同一类型的Bean有多个，尝试根据名字进行二次匹配，匹配不成功再报错。</p>
-<h2 id="非自定义Bean注解开发"><a href="#非自定义Bean注解开发" class="headerlink" title="非自定义Bean注解开发"></a>非自定义Bean注解开发</h2><p>非自定义Bean不能像自定义Bean一样使用Component进行管理，非自定义Bean要通过工厂的方式进行实例化，使用@Bean标注方法即可，@Bean的属性为beanName，如不指定则为当前工厂方法名称。</p>
-<p>@Bean注解下的方法内的依赖会自动根据类型注入</p>
-<p>如果@Bean工厂方法需要<strong>参数</strong>的话，有如下几种注入方式</p>
-<table>
-    <li>使用@Autowired根据类型自动进行Bean的匹配，@Autowired可以省略</li>
-    <li>使用@Qualifier根据名称进行Bean的匹配</li>
-    <li>使用@Value根据名称进行普通数据类型匹配</li>
-</table>
-## Bean配置类的注解开发
-
-<p>@Component等注解替代<bean>标签，定义一个配置类替代原有的xml配置文件，<bean>标签以外的标签，一般都是再配置类上使用注解完成。</p>
-<p>@Configuration注解标识的类为配置类，替代原有xml配置文件，该注解第一个作用时标识该类是一个配置类，第二个作用是具备@Component作用</p>
-<p>@ComponentScan组件扫描配置，替代原有xml文件中的&lt;context:component-scan base-package=””/&gt;</p>
-<p>base-package的配置方法：</p>
-<table>
-    <li>指定一个或多个包名：扫描指定包及其子包下使用注解的类</li>
-    <li>不配置包名：扫描当前@ComponentScan注解配置类所在包及其子包下的类</li>
-</table>
-
-<p>@PropertySource注解用于加载外部properties资源配置，替代原有xml中的&lt;context:property-placeholder location=””/&gt;配置</p>
-<p>@Import用于加载其他配置类，替代原有xml中的&lt;import resource=”classpath:beans.xml”/&gt;配置</p>
-<p>扩展：@Primary注解用于标注相同类型的Bean优先被使用权，@Primary与@Component和@Bean一起使用，标注该Bean的优先级更高，通过类型获取Bean或通过@Autowired根据类型进行注入时，会优先选择优先级更高的</p>
-<p>扩展：@profile注解作痛同于xml配置里的profile属性，是进行环境切换使用的。</p>
-<p>注册@Profile标注再类或方法上，标注当前产生的Bean从属于哪个环境，只有激活了当前环境，被标注的Bean才能被注册到Spring容器里，不指定环境的Bean，任何环境下都能注册到Spring容器里。</p>
-<p>可以使用两种方式指定被激活的环境：</p>
-<table>
-    <li>使用命令行动态参数，虚拟机参数位置加载-Dspring.profiles.active=test</li>
-    <li>使用代码的方式设置环境变量System.setProperty("spring.profiles.active", "test");</li>
-</table>
-
-<h2 id="Spring注解的解析原理"><a href="#Spring注解的解析原理" class="headerlink" title="Spring注解的解析原理"></a>Spring注解的解析原理</h2><p>使用@Component等注解配置完毕后，要配置组件扫描才能使注解生效；</p>
-<p>xml配置组件扫描：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.itheima&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>配置类配置组件扫描：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan(&quot;com.itheima&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="http://rxvukhxe6.hn-bkt.clouddn.com/AnnotationParse.png" title="AnnotationParse"></p>
-<h2 id="Spring注解方式整合第三方框架"><a href="#Spring注解方式整合第三方框架" class="headerlink" title="Spring注解方式整合第三方框架"></a>Spring注解方式整合第三方框架</h2><p>@Import可以导入以下三种类：</p>
-<table>
-    <li>普通的配置类</li>
-    <li>实现ImportSelector接口的类</li>
-    <li>实现ImportBeanDefinitionRegistrar接口的类</li>
-</table>
-# AOP
-
-<h2 id="AOP的概念"><a href="#AOP的概念" class="headerlink" title="AOP的概念"></a>AOP的概念</h2><p>AOP，Aspect Oriented Programming，面向切面编程，是面向对象编程OOP的升华。OOP是纵向对一个事物的抽象，一个对象包括静态的属性信息，包括动态的方法信息等。而AOP是横向的对不同事物的抽象，属性与属性、方法与方法、对象与对象都可以组成一个切面，而用这种思维去设计编程的方式叫做面向切面编程。</p>
-<h2 id="AOP思想的实现方案"><a href="#AOP思想的实现方案" class="headerlink" title="AOP思想的实现方案"></a>AOP思想的实现方案</h2><p>动态代理技术，运行期间，对目标对象的方法进行增强，代理对象同名方法内可以执行原有逻辑的同时嵌入执行其他增强逻辑或其他对象的方法。</p>
-
-      
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/07/21/Spring/" rel="prev" title="SpringFrame">
+      <i class="fa fa-chevron-left"></i> SpringFrame
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
-  
-
-
   
 
 
@@ -1329,6 +957,7 @@ Bean实例后，再进行诸如操作</li>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">Redis基础使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NoSQL%E7%89%B9%E6%80%A7"><span class="nav-number">1.1.</span> <span class="nav-text">NoSQL特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E7%89%B9%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">Redis特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">1.3.</span> <span class="nav-text">Redis数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E9%80%9A%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.4.</span> <span class="nav-text">Redis通用命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String%E7%B1%BB%E5%9E%8B%E5%91%BD%E4%BB%A4"><span class="nav-number">1.5.</span> <span class="nav-text">String类型命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#key%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">1.6.</span> <span class="nav-text">key的结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash%E7%B1%BB%E5%9E%8B%E5%91%BD%E4%BB%A4"><span class="nav-number">1.7.</span> <span class="nav-text">Hash类型命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.8.</span> <span class="nav-text">List类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.9.</span> <span class="nav-text">Set类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SortedSet%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.10.</span> <span class="nav-text">SortedSet类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jedis"><span class="nav-number">2.</span> <span class="nav-text">Jedis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringDataRedis"><span class="nav-number">3.</span> <span class="nav-text">SpringDataRedis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringDataRedis%E5%BF%AB%E9%80%9F%E4%BD%BF%E7%94%A8"><span class="nav-number">3.1.</span> <span class="nav-text">SpringDataRedis快速使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E5%85%A5%E4%BE%9D%E8%B5%96"><span class="nav-number">3.1.1.</span> <span class="nav-text">引入依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">3.1.2.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%85%A5RedisTemplate"><span class="nav-number">3.1.3.</span> <span class="nav-text">注入RedisTemplate</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringDataRedis%E7%9A%84%E5%BA%8F%E5%88%97%E5%8C%96%E6%96%B9%E5%BC%8F"><span class="nav-number">3.2.</span> <span class="nav-text">SpringDataRedis的序列化方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E6%88%98"><span class="nav-number">4.</span> <span class="nav-text">实战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Session%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-number">4.1.</span> <span class="nav-text">Session实现用户短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98"><span class="nav-number">4.2.</span> <span class="nav-text">缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%9A%84%E7%AE%80%E4%BB%8B"><span class="nav-number">4.2.1.</span> <span class="nav-text">缓存的简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-number">4.2.2.</span> <span class="nav-text">添加Redis缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-number">4.2.3.</span> <span class="nav-text">缓存更新策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E5%8A%A8%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-number">4.2.4.</span> <span class="nav-text">主动更新策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-number">4.2.5.</span> <span class="nav-text">缓存穿透</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-number">4.2.6.</span> <span class="nav-text">缓存雪崩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-number">4.2.7.</span> <span class="nav-text">缓存击穿</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%81"><span class="nav-number">4.3.</span> <span class="nav-text">锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B9%90%E8%A7%82%E9%94%81"><span class="nav-number">4.3.1.</span> <span class="nav-text">乐观锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CAS%E6%B3%95"><span class="nav-number">4.3.1.1.</span> <span class="nav-text">CAS法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-number">4.3.2.</span> <span class="nav-text">分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8ERedis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-number">4.3.2.1.</span> <span class="nav-text">基于Redis的分布式锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%B9%E8%BF%9BRedis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-number">4.3.2.2.</span> <span class="nav-text">改进Redis的分布式锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis%E7%9A%84Lua%E8%84%9A%E6%9C%AC"><span class="nav-number">4.3.2.3.</span> <span class="nav-text">Redis的Lua脚本</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redisson"><span class="nav-number">4.4.</span> <span class="nav-text">Redisson</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">4.4.1.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redisson%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">4.4.2.</span> <span class="nav-text">Redisson可重入锁的原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redisson%E5%88%86%E5%B8%83%E5%BC%8F%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">4.4.3.</span> <span class="nav-text">Redisson分布式的原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%B8%BB%E4%BB%8E%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98"><span class="nav-number">4.4.4.</span> <span class="nav-text">Redisson分布式锁主从一致性问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">4.5.</span> <span class="nav-text">消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EList%E7%BB%93%E6%9E%84%E6%A8%A1%E6%8B%9F%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">4.5.1.</span> <span class="nav-text">基于List结构模拟消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">4.5.1.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">4.5.1.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EPubSub%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">4.5.2.</span> <span class="nav-text">基于PubSub的消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E7%82%B9-1"><span class="nav-number">4.5.2.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="nav-number">4.5.2.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EStream%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">4.5.3.</span> <span class="nav-text">基于Stream的消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">4.5.3.1.</span> <span class="nav-text">特点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EStream%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97-%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84"><span class="nav-number">4.5.4.</span> <span class="nav-text">基于Stream的消息队列-消费者组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E7%82%B9-1"><span class="nav-number">4.5.4.1.</span> <span class="nav-text">特点</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
