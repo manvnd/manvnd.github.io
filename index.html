@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.2.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -147,7 +147,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/09/Redis/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/09/redis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -161,7 +161,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2023/08/09/Redis/" class="post-title-link" itemprop="url">redis</a>
+            <a href="/2023/08/09/redis/" class="post-title-link" itemprop="url">Redis</a>
         </h2>
 
         <div class="post-meta">
@@ -178,7 +178,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-24 14:37:05" itemprop="dateModified" datetime="2023-08-24T14:37:05+08:00">2023-08-24</time>
+                <time title="Modified: 2023-09-12 15:54:30" itemprop="dateModified" datetime="2023-09-12T15:54:30+08:00">2023-09-12</time>
               </span>
 
           
@@ -497,7 +497,7 @@
 </ul>
 <p>所有排名默认升序，如果要降序则在命令Z后添加<strong>REV</strong>即可</p>
 <h1 id="Jedis"><a href="#Jedis" class="headerlink" title="Jedis"></a>Jedis</h1><p>Jedis本身是线程不安全的，并且频繁的创建和销毁连接会有性能损耗，因此可以使用Jedis连接池</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> JedisPool jedisPool;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        JedisPoolConfig jedisPoolConfig = <span class="keyword">new</span> JedisPoolConfig();</span><br><span class="line">        jedisPoolConfig.setMaxTotal(<span class="number">8</span>);</span><br><span class="line">        jedisPoolConfig.setMaxIdle(<span class="number">8</span>);</span><br><span class="line">        jedisPoolConfig.setMinIdle(<span class="number">0</span>);</span><br><span class="line">        jedisPoolConfig.setMaxWait(Duration.ofMillis(<span class="number">1000</span>));</span><br><span class="line"></span><br><span class="line">        jedisPool = <span class="keyword">new</span> JedisPool(jedisPoolConfig, <span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6379</span>, <span class="number">1000</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Jedis <span class="title">getJedisPool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> jedisPool.getResource();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> JedisPool jedisPool;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="type">JedisPoolConfig</span> <span class="variable">jedisPoolConfig</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JedisPoolConfig</span>();</span><br><span class="line">        jedisPoolConfig.setMaxTotal(<span class="number">8</span>);</span><br><span class="line">        jedisPoolConfig.setMaxIdle(<span class="number">8</span>);</span><br><span class="line">        jedisPoolConfig.setMinIdle(<span class="number">0</span>);</span><br><span class="line">        jedisPoolConfig.setMaxWait(Duration.ofMillis(<span class="number">1000</span>));</span><br><span class="line"></span><br><span class="line">        jedisPool = <span class="keyword">new</span> <span class="title class_">JedisPool</span>(jedisPoolConfig, <span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6379</span>, <span class="number">1000</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Jedis <span class="title function_">getJedisPool</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> jedisPool.getResource();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <h1 id="SpringDataRedis"><a href="#SpringDataRedis" class="headerlink" title="SpringDataRedis"></a>SpringDataRedis</h1><p>SpringData是Spring中数据操作的模块，包含对各种数据库的集成，其中对Redis的集成模块就叫SpringDataRedis</p>
 <ul>
@@ -562,12 +562,12 @@
 <li>内存占用较大</li>
 </ul>
 <p>可以自定义RedisTemplate的序列化方式：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RedisTemplate&lt;String, Object&gt; <span class="title">redisTemplate</span><span class="params">(RedisConnectionFactory connectionFactory)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 创建RedisTemplate对象</span></span><br><span class="line">        RedisTemplate&lt;String, Object&gt; template = <span class="keyword">new</span> RedisTemplate&lt;&gt;();</span><br><span class="line">        <span class="comment">// 设置连接工厂</span></span><br><span class="line">        template.setConnectionFactory(connectionFactory);</span><br><span class="line">        <span class="comment">// 设置Key的序列化</span></span><br><span class="line">        template.setKeySerializer(RedisSerializer.string());</span><br><span class="line">        template.setHashKeySerializer(RedisSerializer.string());</span><br><span class="line">        <span class="comment">// 设置value的序列化</span></span><br><span class="line">        template.setValueSerializer(<span class="keyword">new</span> GenericJackson2JsonRedisSerializer());</span><br><span class="line">        template.setHashValueSerializer(<span class="keyword">new</span> GenericJackson2JsonRedisSerializer());</span><br><span class="line">        <span class="comment">// 返回</span></span><br><span class="line">        <span class="keyword">return</span> template;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> RedisTemplate&lt;String, Object&gt; <span class="title function_">redisTemplate</span><span class="params">(RedisConnectionFactory connectionFactory)</span> &#123;</span><br><span class="line">        <span class="comment">// 创建RedisTemplate对象</span></span><br><span class="line">        RedisTemplate&lt;String, Object&gt; template = <span class="keyword">new</span> <span class="title class_">RedisTemplate</span>&lt;&gt;();</span><br><span class="line">        <span class="comment">// 设置连接工厂</span></span><br><span class="line">        template.setConnectionFactory(connectionFactory);</span><br><span class="line">        <span class="comment">// 设置Key的序列化</span></span><br><span class="line">        template.setKeySerializer(RedisSerializer.string());</span><br><span class="line">        template.setHashKeySerializer(RedisSerializer.string());</span><br><span class="line">        <span class="comment">// 设置value的序列化</span></span><br><span class="line">        template.setValueSerializer(<span class="keyword">new</span> <span class="title class_">GenericJackson2JsonRedisSerializer</span>());</span><br><span class="line">        template.setHashValueSerializer(<span class="keyword">new</span> <span class="title class_">GenericJackson2JsonRedisSerializer</span>());</span><br><span class="line">        <span class="comment">// 返回</span></span><br><span class="line">        <span class="keyword">return</span> template;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <p>为了实现序列化与反序列化，Template会在Redis数据库中存储”@Class”保存该数据的类，但因此也会产生额外的内存开销</p>
 <p>为了节省空间，一般不会用JSON序列化器来处理value，而是统一使用String序列化器，要求只能存储String类型的key和value。当需要存储Java对象时，手动完成对象的序列化和反序列化</p>
 <p>Spring默认提供一个StringRedisTemplate类，它的key和value的序列化默认就是String方式</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ObjectMapper mapper = <span class="keyword">new</span> ObjectMapper();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">testSaveUser</span><span class="params">()</span> <span class="keyword">throws</span> JsonProcessingException </span>&#123;</span><br><span class="line">        <span class="comment">// 创建对象</span></span><br><span class="line">        User user = <span class="keyword">new</span> User(<span class="string">&quot;虎哥&quot;</span>, <span class="number">21</span>);</span><br><span class="line">        <span class="comment">// 手动序列化</span></span><br><span class="line">        String json = mapper.writeValueAsString(user);</span><br><span class="line">        <span class="comment">// 写入数据</span></span><br><span class="line">        stringRedisTemplate.opsForValue().set(<span class="string">&quot;user:100&quot;</span>, json);</span><br><span class="line">        <span class="comment">// 获取数据</span></span><br><span class="line">        String jsonUser = stringRedisTemplate.opsForValue().get(<span class="string">&quot;user:100&quot;</span>);</span><br><span class="line">        <span class="comment">// 手动反序列化</span></span><br><span class="line">        User user1 = mapper.readValue(jsonUser, User.class);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">ObjectMapper</span> <span class="variable">mapper</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectMapper</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">testSaveUser</span><span class="params">()</span> <span class="keyword">throws</span> JsonProcessingException &#123;</span><br><span class="line">        <span class="comment">// 创建对象</span></span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;虎哥&quot;</span>, <span class="number">21</span>);</span><br><span class="line">        <span class="comment">// 手动序列化</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">json</span> <span class="operator">=</span> mapper.writeValueAsString(user);</span><br><span class="line">        <span class="comment">// 写入数据</span></span><br><span class="line">        stringRedisTemplate.opsForValue().set(<span class="string">&quot;user:100&quot;</span>, json);</span><br><span class="line">        <span class="comment">// 获取数据</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">jsonUser</span> <span class="operator">=</span> stringRedisTemplate.opsForValue().get(<span class="string">&quot;user:100&quot;</span>);</span><br><span class="line">        <span class="comment">// 手动反序列化</span></span><br><span class="line">        <span class="type">User</span> <span class="variable">user1</span> <span class="operator">=</span> mapper.readValue(jsonUser, User.class);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <h1 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h1><h2 id="Session实现用户短信登录"><a href="#Session实现用户短信登录" class="headerlink" title="Session实现用户短信登录"></a>Session实现用户短信登录</h2><p><img src="http://rxvukhxe6.hn-bkt.clouddn.com/%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95.png"></p>
 <h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><h3 id="缓存的简介"><a href="#缓存的简介" class="headerlink" title="缓存的简介"></a>缓存的简介</h3><p><strong>缓存</strong>就是数据交换的缓冲区，是存储数据的临时地方，一般读写性能较高。</p>
@@ -770,9 +770,10 @@
 </ol>
 <h4 id="Redis的Lua脚本"><a href="#Redis的Lua脚本" class="headerlink" title="Redis的Lua脚本"></a>Redis的Lua脚本</h4><p>Redis提供了Lua脚本功能，在一个脚本中编写多条Redis命令，确保多条命令执行时的原子性。</p>
 <h2 id="Redisson"><a href="#Redisson" class="headerlink" title="Redisson"></a>Redisson</h2><p>Redisson是一个在Redis的基础上实现的Java驻内存数据网格。它不仅提供了一系列的分布式的Java常用对象，还提供了许多分布式服务，其中就包括了各种分布式锁的实现</p>
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisConfig</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RedissonClient <span class="title">redissonClient</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 配置类</span></span><br><span class="line">        Config config = <span class="keyword">new</span> Config();</span><br><span class="line">        <span class="comment">// 添加redis地址，这里添加单点地址，也可以使用config.useClusterServers()添加集群地址</span></span><br><span class="line">        config.useSingleServer().setAddress(<span class="string">&quot;redis://127.0.0.1:6379&quot;</span>);</span><br><span class="line">        <span class="comment">// 创建客户端</span></span><br><span class="line">        <span class="keyword">return</span> Redisson.create(config);</span><br><span class="line">    &#125;</span><br><span class="line">            </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedisConfig</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> RedissonClient <span class="title function_">redissonClient</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 配置类</span></span><br><span class="line">        <span class="type">Config</span> <span class="variable">config</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Config</span>();</span><br><span class="line">        <span class="comment">// 添加redis地址，这里添加单点地址，也可以使用config.useClusterServers()添加集群地址</span></span><br><span class="line">        config.useSingleServer().setAddress(<span class="string">&quot;redis://127.0.0.1:6379&quot;</span>);</span><br><span class="line">        <span class="comment">// 创建客户端</span></span><br><span class="line">        <span class="keyword">return</span> Redisson.create(config);</span><br><span class="line">    &#125;</span><br><span class="line">            </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="Redisson可重入锁的原理"><a href="#Redisson可重入锁的原理" class="headerlink" title="Redisson可重入锁的原理"></a>Redisson可重入锁的原理</h3><p>![](/Users/yucan/Documents/文稿 - yucan’s MacBook Pro/Markdown/IMG/Redisson可重入锁原理.png)</p>
+<h3 id="Redisson可重入锁的原理"><a href="#Redisson可重入锁的原理" class="headerlink" title="Redisson可重入锁的原理"></a>Redisson可重入锁的原理</h3><style>.ohdayclidiqk{zoom:50%;}</style><img src="/2023/08/09/redis/Redissonkechongrusuoyuanli.png" class="ohdayclidiqk" alt="Redissonkechongrusuoyuanli">
+
 <p>使用Lua脚本完成上图逻辑保证原子性</p>
 <h3 id="Redisson分布式的原理"><a href="#Redisson分布式的原理" class="headerlink" title="Redisson分布式的原理"></a>Redisson分布式的原理</h3><ul>
 <li><strong>可重入</strong>： 利用hash结构记录线程id和重入次数</li>
@@ -848,7 +849,7 @@
 <li>MKSTREAM：队列不存在时自动创建队列</li>
 </ul>
 <p>其他常见命令</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 删除指定的消费者组</span></span><br><span class="line">XGROUP DESTROY key groupName</span><br><span class="line"><span class="meta">#</span><span class="bash"> 给指定的消费者组天假消费者</span></span><br><span class="line">XGROUP CREATECONSUMER key groupname consumername</span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除消费者组中的指定消费者</span></span><br><span class="line">XGROUP DELCONSUMER key groupname consumername</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除指定的消费者组</span></span><br><span class="line">XGROUP DESTROY key groupName</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">给指定的消费者组天假消费者</span></span><br><span class="line">XGROUP CREATECONSUMER key groupname consumername</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除消费者组中的指定消费者</span></span><br><span class="line">XGROUP DELCONSUMER key groupname consumername</span><br></pre></td></tr></table></figure>
 
 <p>从消费者组读取消息：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XREADGROUP GROUP group consumer [COUNT count] [BLOCK milliseconds] [NOACK] STREAMS key [key ...] ID [ID ...]</span><br></pre></td></tr></table></figure>
@@ -873,394 +874,660 @@
 <li>没有消费漏读风险</li>
 <li>有消息确认机制，保证消息至少被消费一次</li>
 </ul>
+<h2 id="GEO数据结构"><a href="#GEO数据结构" class="headerlink" title="GEO数据结构"></a>GEO数据结构</h2><p>GEO就是Geolocation的简写形式，代表地理坐标。Redis在3.2版本加入了对GEO的支持，允许存储地理坐标信息。常见的命令有：</p>
+<ul>
+<li>GEOADD：添加一个地理空间信息，包括经度（longitude）、维度（latitude）、值（member）</li>
+<li>GEODIST：计算指定的两个点之间的距离并返回</li>
+<li>GEOHASH：将指定member的坐标转为hash字符串形式并返回</li>
+<li>GEOPOS：返回指定member的坐标</li>
+<li>GEORADIUS：指定圆心、半径，找到该圆内包含的所有member，并按照与圆心之间的距离排序后返回</li>
+<li>GEOSEARCH：在指定范围内搜索member，并按照与指定点之间的距离排序后返回。范围可以是圆形或矩形</li>
+<li>GEOSEARCHSTORE：与GEOSEARCH功能一致，不过可以吧结果存储到一个指定的key</li>
+</ul>
+<h2 id="BitMap"><a href="#BitMap" class="headerlink" title="BitMap"></a>BitMap</h2><p>位图，将每个bit位与业务对应，0，1表示业务状态。</p>
+<p><strong>Redis</strong>中利用string类型数据结构实现<strong>BitMap</strong>，因此最大上限是512M，转换bit则是2^32个bit位</p>
+<p>BitMap的操作命令有：</p>
+<ul>
+<li>SETBIT：向指定位置（offset）存入一个0或1</li>
+<li>GETBIT：获取指定位置（offset）的bit值</li>
+<li>BITCOUNT：统计BitMap中值为1的bit位的数量</li>
+<li>BITFIELD：操作（查询、修改、自增）BitMap中bit数组中指定位置（offset）的值</li>
+<li>BITFIELD_RO：获取BitMap中bit数组，并以十进制形式返回</li>
+<li>BITOP：将多个BitMap的结果做位运算（与、或、异或）</li>
+<li>BITPOS：查找bit数组中指定范围内第一个0或1出现的位置</li>
+</ul>
+<h2 id="HyperLogLog用法"><a href="#HyperLogLog用法" class="headerlink" title="HyperLogLog用法"></a>HyperLogLog用法</h2><ul>
+<li>UV：全称Unique Visitor，也叫独立访问量，指通过互联网那个访问、浏览这个网页的自然人。一天内同一个用户多次访问该网站，只记录一次</li>
+<li>PV：全称Page View，也叫页面访问量或点击量，用户每访问网站的一个页面，记录1次PV，用户多次打开页面，则记录多次PV。往往用来衡量网站的流量</li>
+</ul>
+<p>HyperLogLog（HLL）是从LogLog算法派生的概率算法，用于确定非常大的集合的基数，而不需要存储其所有值。</p>
+<p>Redis中的HLL是基于string结构实现的，单个HLL的内存永远小于16kb，内存占用低，作为代价，有小于0.81%的误差。不过对于UV统计来说，这完全可以忽略</p>
+<h2 id="分布式缓存"><a href="#分布式缓存" class="headerlink" title="分布式缓存"></a>分布式缓存</h2><h3 id="Redis持久化"><a href="#Redis持久化" class="headerlink" title="Redis持久化"></a>Redis持久化</h3><h4 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h4><p>RDB全程Redis Database Backup file（Redis数据备份文件），也叫做Redis数据快照。即把内存中的所有数据都记录到磁盘中。当Redis实例故障重启后，从磁盘读取快照文件，恢复数据</p>
+<p>快照文件称为RDB文件，默认保存在当前目录</p>
+<ul>
+<li>save：由Redis主进程来执行RDB，会阻塞所有命令</li>
+<li>bgsave：开启子进程执行RDB，避免主进程收到影响</li>
+</ul>
+<p>RDB停机时会执行一次RDB</p>
+<p>Redis内部有触发RDB的机制，可以在redis.conf文件中找到，格式如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">900秒内，如果至少有1个key被修改，则执行bgsave，如果save <span class="string">&quot;&quot;</span> 则表示禁用RDB</span></span><br><span class="line">save &lt;seconds&gt; &lt;change&gt;</span><br><span class="line">save 900 1</span><br><span class="line">save 300 10</span><br><span class="line">save 60 10000</span><br></pre></td></tr></table></figure>
 
-      
-    </div>
+<p>RDB的其它配置也可以在redis.conf文件中设置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">是否压缩，建议不开启，压缩会消耗CPU，磁盘不值钱</span></span><br><span class="line">rdbcompression yes</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">RDB文件名称</span></span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">文件保存的路径目录</span></span><br><span class="line">dir ./</span><br></pre></td></tr></table></figure>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+<p>bgsave开始时会fork主进程得到子进程，子进程<strong>共享</strong>主进程的内存数据。完成fork后读取内存数据并写入RDB文件</p>
+<p>fork采取的是copy-on-write技术：</p>
+<ul>
+<li>当主进程执行读操作时，访问共享内存</li>
+<li>当主进程执行写操作时，则会拷贝一份数据，执行写操作</li>
+</ul>
+<h5 id="RDB方式bgsave的执行流程"><a href="#RDB方式bgsave的执行流程" class="headerlink" title="RDB方式bgsave的执行流程"></a>RDB方式bgsave的执行流程</h5><ul>
+<li>fork主进程得到一个子进程，共享内存空间</li>
+<li>子进程读取内存数据并写入新的RDB文件</li>
+<li>用新的RDB文件替换旧的RDB文件</li>
+</ul>
+<h5 id="RDB的执行时机"><a href="#RDB的执行时机" class="headerlink" title="RDB的执行时机"></a>RDB的执行时机</h5><ul>
+<li>默认是服务停止时</li>
+</ul>
+<h5 id="RDB的缺点"><a href="#RDB的缺点" class="headerlink" title="RDB的缺点"></a>RDB的缺点</h5><ul>
+<li>RDB执行间隔时间长，两次RDB之间写入数据有丢失的风险</li>
+<li>fork子进程、压缩、写入数据有数据丢失的风险</li>
+</ul>
+<h4 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h4><p>AOF全程为Append Only File（追加文件）。Redis处理的每一个写命令都会记录在AOF文件，可以看作是命令日志文件</p>
+<p>AOF默认是关闭的，需要修改redis.conf配置文件来开启AOF</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">是否开启AOF功能，默认是no</span></span><br><span class="line">appendonly yes</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">AOF文件的名称</span></span><br><span class="line">appendfilename &quot;appendonly.aof&quot;</span><br></pre></td></tr></table></figure>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/21/Spring/">
+<p>AOF的命令记录的频率也可以通过redis.cnf文件来配置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">表示每执行一次写命令，立刻记录到AOF文件</span></span><br><span class="line">appendfsync always</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">写命令执行完先放入AOF缓冲区，然后表示每隔一秒讲缓冲区数据写到AOF文件，是默认方案</span></span><br><span class="line">appendfsync everysec</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">写命令执行完先放入AOF缓冲区，由操作系统决定何时讲缓冲区内容写回磁盘</span></span><br><span class="line">appendfsync no</span><br></pre></td></tr></table></figure>
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="MANVND">
-      <meta itemprop="description" content="There is no royal road to learning">
-    </span>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>刷盘时机</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Always</td>
+<td>同步刷盘</td>
+<td>可靠性高，几乎不丢失数据</td>
+<td>性能影响大</td>
+</tr>
+<tr>
+<td>everysec</td>
+<td>每秒刷盘</td>
+<td>性能适中</td>
+<td>最多丢失一秒数据</td>
+</tr>
+<tr>
+<td>no</td>
+<td>操作系统控制</td>
+<td>性能最好</td>
+<td>可靠性较差，可能丢失大量数据</td>
+</tr>
+</tbody></table>
+<p>因为记录命令，AOF文件会比RDB文件大很多。而且AOF会记录对同一个key的多次写操作，但只有最后一次写操作才有意义。通过执行<strong>bgrewriteaof</strong>命令，可以让AOF文件执行重写功能，用最少得命令达到相同效果</p>
+<p>Redis也会在触发阈值时自动重写AOF文件。阈值也可以在redis.conf中配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">AOF文件比上次文件 增长超过多少百分比则触发重写</span></span><br><span class="line">auto-aof-rewrite-percentage 100</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">AOF文件体积最小多大以上才触发重写</span></span><br><span class="line">auto-aof-rewrite-min-size 64mb</span><br></pre></td></tr></table></figure>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/07/21/Spring/" class="post-title-link" itemprop="url">SpringFrame</a>
-        </h2>
+<h5 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h5><p>RDB和AOF各有自己的优缺点，如果对数据安全性要求较高，在实际开发中往往会<strong>结合</strong>两者来使用</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">RDB</th>
+<th align="center">AOF</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">持久化方式</td>
+<td align="center">定时对整个内存做快照</td>
+<td align="center">记录每一次执行的命令</td>
+</tr>
+<tr>
+<td align="center">数据完整性</td>
+<td align="center">不完整，两次备份之间会丢失</td>
+<td align="center">相对完整，取决于刷盘策略</td>
+</tr>
+<tr>
+<td align="center">文件大小</td>
+<td align="center">会有压缩，文件体积小</td>
+<td align="center">记录命令，文件体积很大</td>
+</tr>
+<tr>
+<td align="center">宕机回复速度</td>
+<td align="center">很快</td>
+<td align="center">慢</td>
+</tr>
+<tr>
+<td align="center">数据恢复优先级</td>
+<td align="center">低，因为数据完整性不如AOF</td>
+<td align="center">高，因为数据完整性更高</td>
+</tr>
+<tr>
+<td align="center">系统资源占用</td>
+<td align="center">高，大量CPU和内存消耗</td>
+<td align="center">低，主要是磁盘IO资源但AOF重写时会赵勇大量CPU和内存资源</td>
+</tr>
+<tr>
+<td align="center">使用场景</td>
+<td align="center">可以容忍数分钟的数据丢失，追求更高的启动速度</td>
+<td align="center">对数据安全性要求较高，常见</td>
+</tr>
+</tbody></table>
+<h3 id="主从架构"><a href="#主从架构" class="headerlink" title="主从架构"></a>主从架构</h3><p>单节点Redis的并发能力是有上限的，要进一步提高Redis的并发能力，就需要搭建主从集群，实现读写分离</p>
+<p>master节点负责写操作，slave/replica节点负责读操作</p>
+<h5 id="数据同步原理"><a href="#数据同步原理" class="headerlink" title="数据同步原理"></a>数据同步原理</h5><style>.mpdblcgyixcy{zoom:50%;}</style><img src="/2023/08/09/redis/zhucongdiyicitongbu.png" class="mpdblcgyixcy" alt="zhucongdiyicitongbu">
 
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
+<p>master判断slave是否是第一次同步数据的依据：</p>
+<ul>
+<li><strong>Replication Id</strong>：简称replid，是数据集的标记，id一致则说明是同一数据集。每一个master都有唯一的replid，slave则会继承master节点的replid</li>
+<li><strong>offset</strong>：偏移量，随着记录在repl_baklog中的数据增多而逐渐增大。slave完成同步时也会记录当前同步的offset。如果slave的offset小于master的offset，说明slave数据落后于master，需要更新</li>
+</ul>
+<p>因为slave做数据同步，必须向master声明自己的<strong>replication id</strong>和<strong>offset</strong>，master才可以判断到底需要同步哪些数据</p>
+<p>上图1.1中<strong>通过判断主从节点的replid是否一致来判断主从节点是否是第一次同步</strong></p>
+<h5 id="全量同步的原理"><a href="#全量同步的原理" class="headerlink" title="全量同步的原理"></a>全量同步的原理</h5><ul>
+<li>slave节点请求增量同步</li>
+<li>master节点判断replid，发现不一致，拒绝增量同步</li>
+<li>master将完整内存数据生成RDB，发送RDB到slave</li>
+<li>slave清空本地数据，加载master的RDB</li>
+<li>master将RDB期间的命令记录到repl_baklog，并持续将log中的命令发送个slave</li>
+<li>slave执行接收到的命令，保持与master之间的同步</li>
+</ul>
+<style>.mnsqdrpfgjey{zoom:50%;}</style><img src="/2023/08/09/redis/zengliangtongbu.png" class="mnsqdrpfgjey" alt="zengliangtongbu">
 
-              <time title="Created: 2023-07-21 14:09:32" itemprop="dateCreated datePublished" datetime="2023-07-21T14:09:32+08:00">2023-07-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-24 14:31:07" itemprop="dateModified" datetime="2023-08-24T14:31:07+08:00">2023-08-24</time>
-              </span>
+<p>repl_baklog大小有上限，写满后会覆盖最早的数据。如果slave断开时间过久，导致尚未备份的数据被覆盖，则无法基于log做增量同步，只能再次全量同步</p>
+<p>可以从以下几个方面优化Redis主从集群：</p>
+<ul>
+<li>在master中配置repl_diskless-sync yes启用无磁盘复制，避免全量同步时的磁盘IO</li>
+<li>Redis单节点上的内存占用不要太大，减少RDB导致的过多磁盘IO</li>
+<li>适当提高repl_baklog的大小，发现slave宕机时尽快实现故障恢复，尽可能避免全量同步</li>
+<li>限制一个master上的slave节点数量，如果是在是太多slave，则可以采用主-从-从链式结构，减少master压力</li>
+</ul>
+<h5 id="全量同步与增量同步的区别"><a href="#全量同步与增量同步的区别" class="headerlink" title="全量同步与增量同步的区别"></a>全量同步与增量同步的区别</h5><ul>
+<li>全量同步：master将完整内存数据生成RDB，发送RDB到slave。后续命令记录到repl_baklog，逐个发送给slave</li>
+<li>增量同步：slave提交自己的offset到master，master获取repl_baklog中从offset之后的命令给slave</li>
+</ul>
+<h5 id="执行全量同步时机"><a href="#执行全量同步时机" class="headerlink" title="执行全量同步时机"></a>执行全量同步时机</h5><ul>
+<li>slave节点第一次连接master节点时</li>
+<li>slave节点断开时间太久，repl_baklog中的offset已经被覆盖时</li>
+</ul>
+<h5 id="执行增量同步时机"><a href="#执行增量同步时机" class="headerlink" title="执行增量同步时机"></a>执行增量同步时机</h5><ul>
+<li>slave节点断开又恢复，并且在repl_baklog中能找到offset时</li>
+</ul>
+<h3 id="Redis哨兵"><a href="#Redis哨兵" class="headerlink" title="Redis哨兵"></a>Redis哨兵</h3><h4 id="哨兵的作用"><a href="#哨兵的作用" class="headerlink" title="哨兵的作用"></a>哨兵的作用</h4><p>Redis提供了哨兵（Sentinel）机制来实现主从集群的自动故障恢复。哨兵的结构和作用如下：</p>
+<ul>
+<li><strong>监控</strong>：Sentinel会不断检查master和slave是否按预期工作</li>
+<li><strong>自动故障恢复</strong>：如果master故障，Sentinel会将一个slave提升为master。当故障实例回复后也以新的master为主</li>
+<li><strong>通知</strong>：Sentinel充当Redis客户端的服务发现来源，当集群发生故障转移时，会将最近信息推送给Redis的客户端</li>
+</ul>
+<p>结构：</p>
+<style>.qpxlbmaupfxn{zoom:67%;}</style><img src="/2023/08/09/redis/shaobingjiegou.png" class="qpxlbmaupfxn" alt="shaobingjiegou">
 
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="传统JavaWeb开发困惑与解决方案"><a href="#传统JavaWeb开发困惑与解决方案" class="headerlink" title="传统JavaWeb开发困惑与解决方案"></a>传统JavaWeb开发困惑与解决方案</h1><ol>
-  <li>传统JavaWeb开发耦合度太高。<br>解决思路：程序代码不自己创建对象，而是第三方创建对象 </li>
-  <li>通用的事务功能耦合在业务代码中，通用的日志功能耦合在业务代码中<br>解决思路：第三方返回需要Bean对象的代理对象</li>
+<h4 id="服务状态监控"><a href="#服务状态监控" class="headerlink" title="服务状态监控"></a>服务状态监控</h4><p>Sentinel基于心跳机制监测服务状态，每隔一秒向集群的每个实例发送ping命令：</p>
+<ul>
+<li>主观下线：如果某个sentinel节点发现某实例未在规定时间响应，则认为该实例<strong>主观下线</strong></li>
+<li>客观下线：若超过指定数量（quorum）的sentinel都认为该实例主观下线，则该实例<strong>客观下线</strong>。quorum值最后超过Sentinel实例数量的一半</li>
+</ul>
+<h4 id="选举新的master"><a href="#选举新的master" class="headerlink" title="选举新的master"></a>选举新的master</h4><p>一旦发现master故障，sentine需要在slave中选择一个作为新的master，选择依据是：</p>
+<ul>
+<li>首先会判断slave节点与master节点断开时间长短，如果超过指定值（down-after-milliseconds * 10）则会排除该slave节点</li>
+<li>然后判断slave节点的slave-priority值，越小优先级越高，如果是0则永不参与选举</li>
+<li>如果slave-prority一样，则判断slave节点的offset值，越大说明数据越新，优先级越高</li>
+<li>最后判断slave节点的运行id大小，越小优先级越高</li>
+</ul>
+<h4 id="实现故障转移"><a href="#实现故障转移" class="headerlink" title="实现故障转移"></a>实现故障转移</h4><p>当选中了其中一个slave为新的master后，故障的转移步骤如下：</p>
+<ul>
+<li>sentinel给备选的slave节点发送slaveof no one命令，让该节点成为master</li>
+<li>sentinel给所有其他slave发送slaveof &lt;ip&gt; &lt;端口&gt;命令，让这些slave成为新master的从节点，开始从新的master上同步数据</li>
+<li>最后，sentinel将故障节点标记为slave，当故障节点恢复后会自动成为新的maaster的slave节点</li>
+</ul>
+<h4 id="Sentinel的三个作用"><a href="#Sentinel的三个作用" class="headerlink" title="Sentinel的三个作用"></a>Sentinel的三个作用</h4><ul>
+<li>监控</li>
+<li>故障转移</li>
+<li>通知</li>
+</ul>
+<h4 id="RedisTemplate的哨兵模式"><a href="#RedisTemplate的哨兵模式" class="headerlink" title="RedisTemplate的哨兵模式"></a>RedisTemplate的哨兵模式</h4><p>在Sentinel集群监督下的Redis主从集群，其节点会因为自动故障转移而发生变化，Redis的客户端必须感知这种变化，及时更新连接信息。Spring的RedisTemplate底层利用lettuce实现了节点的感知与自动切换</p>
+<h3 id="Redis分片集群"><a href="#Redis分片集群" class="headerlink" title="Redis分片集群"></a>Redis分片集群</h3><p>主从和哨兵可以解决高可用、高并发读的问题。但是依然有两个问题没有解决：</p>
+<ul>
+<li>海量数据存储问题</li>
+<li>高并发写的问题</li>
+</ul>
+<p>使用分片集群可以解决上述问题，分片集群特征：</p>
+<ul>
+<li>集群中有多个master，每个master保存不同数据</li>
+<li>每个master都可以有多个slave节点</li>
+<li>master之间通过ping监测彼此健康状态</li>
+<li>客户端请求可以访问集群任意节点，最终都会被转发到正确节点</li>
+</ul>
+<h4 id="散列插槽"><a href="#散列插槽" class="headerlink" title="散列插槽"></a>散列插槽</h4><p>Redis会把每一个master节点映射到0~16383共16384个插槽（hash slot）上，查看集群信息时就能看到</p>
+<p>数据key不是与节点绑定，而是与插槽绑定。redis回根据key的有小部分计算插槽，分两种情况：</p>
+<ul>
+<li>kay中包含”{}”，且”{}”中至少包含1个字符，”{}”中的部分是有效部分</li>
+<li>key中不包含”{}”，整个key都是有效部分</li>
+</ul>
+<p>例如：key是num，那么就根据num计算，如果是{itcast}num，则根据itcast计算。计算方式是利用CRC16算法得到一个hash值，然后对16384取余，得到的结果就是slot值</p>
+<h5 id="Redis判断key与实例的对应关系"><a href="#Redis判断key与实例的对应关系" class="headerlink" title="Redis判断key与实例的对应关系"></a>Redis判断key与实例的对应关系</h5><ul>
+<li>将16384个插槽分配给不同的实例</li>
+<li>根据key的有效部分计算哈希值，对16384取余</li>
+<li>余数作为插槽，寻找插槽所在实例即可</li>
+</ul>
+<h5 id="将一类数据固定保存到同一个Redis实例的方式"><a href="#将一类数据固定保存到同一个Redis实例的方式" class="headerlink" title="将一类数据固定保存到同一个Redis实例的方式"></a>将一类数据固定保存到同一个Redis实例的方式</h5><ul>
+<li>这一类数据使用相同的有效部分，例如key都以{key_prfiex}为前缀</li>
+</ul>
+<h4 id="集群伸缩"><a href="#集群伸缩" class="headerlink" title="集群伸缩"></a>集群伸缩</h4><p>Redis-cli –cluster提供了很多操作集群的命令</p>
+<h4 id="故障转移"><a href="#故障转移" class="headerlink" title="故障转移"></a>故障转移</h4><p>当集群中有一个master宕机：</p>
+<ol>
+<li>首先是该实例与其他实例失去连接</li>
+<li>然后疑似宕机</li>
+<li>最后确定下线，自动提升一个slave为新的master</li>
 </ol>
+<h5 id="数据迁移"><a href="#数据迁移" class="headerlink" title="数据迁移"></a>数据迁移</h5><p>利用cluster failvoer命令可以手动让集群中的某个master宕机，切换到执行cluster failover命令的这个slave节点，实现无感知的数据迁移。流程如下：</p>
+<style>.xxyyqhsjqqzk{zoom:50%;}</style><img src="/2023/08/09/redis/shujuqianyi.png" class="xxyyqhsjqqzk" alt="shujuqianyi">
 
-<h1 id="三种思想"><a href="#三种思想" class="headerlink" title="三种思想"></a>三种思想</h1><ol>
-  <li>Ioc思想：Inversion of Control，控制反转，强调的是原本在程序中创建Bean的权利反转给第三方</li>
-  <li>DI思想：Dependency Injection，依赖注入，强调Bean之间的关系，这种关系第三方负责去设置</li>
-  <li>AOP思想：Aspect Oriented Programming，面向切面编程，功能的横向切取，实现方式为proxy</li>
+<p>手动的Failover支持三种不同模式：</p>
+<ul>
+<li>缺省：默认的流程，如图1~6步</li>
+<li>force：省略了对offset的一致性校验</li>
+<li>takeover：直接执行第五步，忽略数据一致性、忽略master状态和其他master的意见</li>
+</ul>
+<h4 id="RedisTemplate访问分片集群"><a href="#RedisTemplate访问分片集群" class="headerlink" title="RedisTemplate访问分片集群"></a>RedisTemplate访问分片集群</h4><p>RedisTemplate底层同样给予lettuce实现了分片集群的访问，而使用的步骤与哨兵模式基本一致：</p>
+<ol>
+<li>引入redis的starter依赖</li>
+<li>配置分片集群地址</li>
+<li>配置读写分离</li>
 </ol>
+<p>与哨兵模式相比，其中只有分片集群的配置方式略有差异，如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spirng:</span></span><br><span class="line">	<span class="attr">redis:</span></span><br><span class="line">		<span class="attr">cluster:</span></span><br><span class="line">			<span class="attr">nodes:</span> <span class="comment"># 指定分片集群的每一个节点信息</span></span><br><span class="line">				<span class="bullet">-</span> <span class="number">192.168</span><span class="number">.150</span><span class="number">.101</span><span class="string">:7001</span></span><br><span class="line">				<span class="bullet">-</span> <span class="number">192.168</span><span class="number">.150</span><span class="number">.101</span><span class="string">:7002</span></span><br><span class="line">				<span class="bullet">-</span> <span class="number">192.168</span><span class="number">.150</span><span class="number">.101</span><span class="string">:7003</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="Spring-Bean的配置详解"><a href="#Spring-Bean的配置详解" class="headerlink" title="Spring-Bean的配置详解"></a>Spring-Bean的配置详解</h1><p>Spring开发中主要对Bean进行配置，Bean的常用配置如下</p>
+<h3 id="多级缓存"><a href="#多级缓存" class="headerlink" title="多级缓存"></a>多级缓存</h3><h4 id="传统缓存的问题"><a href="#传统缓存的问题" class="headerlink" title="传统缓存的问题"></a>传统缓存的问题</h4><p>传统的缓存策略一般是请求到达Tomcat后，先查询Redis，如果未命中则查询数据库，存在以下问题：</p>
+<ul>
+<li>请求要经过Tomcat处理，Tomcat的性能成为整个系统的瓶颈</li>
+<li>Redis缓存失效时，会对数据库产生冲击</li>
+</ul>
+<h4 id="多级缓存方案"><a href="#多级缓存方案" class="headerlink" title="多级缓存方案"></a>多级缓存方案</h4><p>多级缓存就是充分利用请求处理的各个环节，分别添加缓存，减轻Tomcat压力，提升服务性能</p>
+<p>用作缓存的Nginx是业务Nginx，需要部署为集群，再有专门的Nginx用来做反向代理</p>
+<style>.rcrsjblycfvu{zoom:67%;}</style><img src="/2023/08/09/redis/duojihuancun.png" class="rcrsjblycfvu" alt="duojihuancun">
+
+<h4 id="JVM进程缓存"><a href="#JVM进程缓存" class="headerlink" title="JVM进程缓存"></a>JVM进程缓存</h4><h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="Redis数据结构-1"><a href="#Redis数据结构-1" class="headerlink" title="Redis数据结构"></a>Redis数据结构</h2><h3 id="动态字符串SDS"><a href="#动态字符串SDS" class="headerlink" title="动态字符串SDS"></a>动态字符串SDS</h3><p>Redis中保存的key是字符串，value往往是字符串或者字符串的集合。可见字符串是Redis中最常见的一种数据结构</p>
+<p>不过Redis没有直接使用C语言中的字符串，因为C语言字符串存在很多问题</p>
+<ul>
+<li>获取字符串长度需要通过运算</li>
+<li>非二进制安全</li>
+<li>不可修改</li>
+</ul>
+<p>Redis构建了一种新的字符串结构，称为<strong>简单动态字符串</strong>（Simple Dynamic String），简称SDS。</p>
+<p>例如，执行如下命令:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set name 虎哥</span><br></pre></td></tr></table></figure>
+
+<p>那么Redis将会在底层创建两个SDS，其中一个是包含”name”的SDS，另一个是包含”虎哥”的SDS</p>
+<p>Redis是C语言实现的，其中SDS是一个结构体，源码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">attribute__</span> ((__<span class="title">packed__</span>)) <span class="title">sdshdr8</span> &#123;</span></span><br><span class="line">  <span class="type">uint8_t</span> len; <span class="comment">/* buf已保存的字符串字节数，不包含结束标示 */</span></span><br><span class="line">  <span class="type">uint8_t</span> alloc; <span class="comment">/* buf申请的总的字节数，不包含结束标示 */</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">char</span> flags; <span class="comment">/* 不同SDS的头类型，用来控制SDS的头大小 */</span></span><br><span class="line">  <span class="type">char</span> buf[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>SDS之所以叫做动态字符串，是因为它具备动态扩容的能力，例如一个内容为”hi”的SDS：</p>
 <table>
-  <li>id，class Bean的id和全限定名配置</li>
-  <li>name 通过name设置Bean的别名，通过别名也能直接获得Bean实例</li>
-  <li>scope Bean的作用范围，BeanFactory作为容器时取值singleton和prototype</li>
-  <li>lazy-init Bean的实例化时机，是否延迟加载。BeanFactory作为容器时无效</li>
-  <li>init-method Bean实例化后自动执行的初始化方法，method指定方法名</li>
-  <li>destroy-method Bean实例销毁前的方法，method指定方法名</li>
-  <li>autowire 设置自动注入模式，常用的有按照类型byType，按照名字byName</li>
-  <li>factory-bean factory-method 指定哪个工厂Bean的哪个方法完成Bean的创建</li>
+  <tr>
+      <th>len: 2</th>
+    <th>alloc: 2</th>
+    <th>flags: 1</th>
+    <th>h</th>
+    <th>i</th>
+    <th>\0</th>
+  </tr>
 </table>
 
-<h2 id="Bean-id"><a href="#Bean-id" class="headerlink" title="Bean-id"></a>Bean-id</h2><p>不同Bean的id不能重复，不给Bean配置idBean依然有默认id。</p>
-<h2 id="Bean-name"><a href="#Bean-name" class="headerlink" title="Bean-name"></a>Bean-name</h2><p>别名，Bean name可以有多个，不同name之间用逗号隔开；不指定id会用name替代id。</p>
-<h2 id="Bean-scope"><a href="#Bean-scope" class="headerlink" title="Bean-scope"></a>Bean-scope</h2><p>默认情况下，Spring环境Bean的作用范围有两个：Singleton和Prototype</p>
+<p>假如给SDS追加一段字符串”,Amy”，首先会申请新的内存空间：</p>
+<ul>
+<li>如果新字符串小于1M，则新空间为扩展后字符串长度的两倍+1</li>
+<li>如果新字符串大于1M，则新空间为扩展后字符串长度+1M+1。称为<strong>内存预分配</strong></li>
+</ul>
 <table>
-  <li>singleton: 单例，默认值，Spring容器创建的时候，就会进行Bean的实例化，并存储在容器内部的单例池中，每次getBean都是从单例池中获取相同的Bean实例</li>
-  <li>prototype: 原型，Spring容器初始化时不会创建Bean实例，当调用getBean时才会实例化Bean，每次getBean都会创建一个新的Bean实例</li>
+  <tr>
+      <th>len: 6</th>
+    <th>alloc: 12</th>
+    <th>flags: 1</th>
+    <th>h</th>
+    <th>i</th>
+    <th>,</th>
+    <th>A</th>
+    <th>m</th>
+    <th>y</th>
+    <th>\0</th>
+    <th> </th>
+    <th> </th>
+    <th> </th>
+  </tr>
 </table>
 
-<h2 id="Bean-lazy-init"><a href="#Bean-lazy-init" class="headerlink" title="Bean-lazy-init"></a>Bean-lazy-init</h2><p>当lazy-init设置为true时为延迟加载，也就是当Spring容器创建的时候，不会立刻创建Bean实例，等待用到时在创建Bean实例并存储在单例池中，后续在使用该Bean直接从单例池获取，本质上该Bean还是单例的。</p>
-<h2 id="Bean的初始化和销毁方法配置"><a href="#Bean的初始化和销毁方法配置" class="headerlink" title="Bean的初始化和销毁方法配置"></a>Bean的初始化和销毁方法配置</h2><p>Bean在实例化后，可以执行指定的初始化方法完成一些初始化的操作，Bean在销毁之前也可以执行指定的销毁方法完成一些操作。</p>
-<p>构造方法-&gt;初始化方法-&gt;销毁方法。</p>
-<p>也可以通过实现InitializingBean接口，完成Bean的初始化操作。</p>
-<h2 id="Bean的实例化设置"><a href="#Bean的实例化设置" class="headerlink" title="Bean的实例化设置"></a>Bean的实例化设置</h2><p>Spring的实例化方式主要有两种：</p>
+<h4 id="优点-2"><a href="#优点-2" class="headerlink" title="优点"></a>优点</h4><ol>
+<li>获取字符串长度的时间复杂度为O(1)</li>
+<li>支持动态扩容</li>
+<li>减少内存分配次数</li>
+<li>二进制安全</li>
+</ol>
+<h3 id="IntSet"><a href="#IntSet" class="headerlink" title="IntSet"></a>IntSet</h3><p>IntSet是Redis中set集合的一种实现方式，基于整数数组来实现，并且具备长度可变，有序等特征</p>
+<p>结构如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">intset</span> &#123;</span></span><br><span class="line">  <span class="type">uint32_t</span> encoding; <span class="comment">/* 编码方式，支持存放16位、32位、64位整数 */</span></span><br><span class="line">  <span class="type">uint32_t</span> length; <span class="comment">/* 元素个数 */</span></span><br><span class="line">  <span class="type">int8_t</span> contents[]; <span class="comment">/* 整数数组，保存集合数据 */</span></span><br><span class="line">&#125; intset;</span><br></pre></td></tr></table></figure>
+
+<p>其中的encoding包含三种模式，表示存储的整数大小不同：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> INTSET_ENC_INT16 (sizeof(int16_t)) <span class="comment">/* 2字节整数，范围类似java的short */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INTSET_ENC_INT32 (sizeof(int32_t)) <span class="comment">/* 4字节整数，范围类似java的int */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INTSET_ENC_INT64 (sizeof(int64_t)) <span class="comment">/* 8字节整数，范围类似java的long */</span></span></span><br></pre></td></tr></table></figure>
+
+<p>为了方便查找，Redis会将intset中所有的整数按照升序一次保存在contents数组中，结构如图</p>
 <table>
-  <li>构造方式实例化：底层通过构造方法对Bean进行实例化</li>
-  <li>工厂方式实例化：底层通过调用自定义的工厂方法对Bean进行实例化</li>
+  <tr>
+      <th>encoding: INTSET_ENC_INT16</th>
+    <th>length: 3</th>
+    <th>5</th>
+    <th>10</th>
+    <th>20</th>
+  </tr>
 </table>
 
-<p>工厂方式实例化Bean分为三种：</p>
+<p>数组中每个数字都在int16_t的范围内，因此采用的编码方式为INTSET_ENC_INT16，每部分占用的字节大小为：</p>
+<ul>
+<li>encoding：4字节</li>
+<li>length：4字节</li>
+<li>contents：2字节*3=6字节</li>
+</ul>
+<p>假设有一个intset，元素为[5, 10, 20]，采用的编码是INTSET_ENC_INT16，则每个整数占2字节：</p>
+<p>向其中添加一个数字：50000，这个数字超过了int16_t的范围，intset会自动<strong>升级</strong>编码方式到合适的大小</p>
+<p>流程如下：</p>
+<ol>
+<li>升级编码为INTSET_ENC_INT32，每个整数占4字节，并按照新的编码方式及元素个数扩容数组</li>
+<li>倒序依次将数组中的元素拷贝到扩容后的正确位置</li>
+<li>将待添加的元素放入数组末尾</li>
+<li>最后，将inset的encoding属性改为INTSET_ENC_INT32，将length属性改为4</li>
+</ol>
 <table>
-  <li>静态工厂方法实例化Bean</li>
-  <li>实例工厂方法实例化Bean，先配置工厂对象，然后调用实例化的工厂对象内的方法</li>
-  <li>实现FactoryBean规范延迟实例化Bean，实现FactoryBean接口，容器自动调用实现的getObject方法</li>
+  <tr>
+      <th>encoding: INTSET_ENC_INT32</th>
+    <th>length: 4</th>
+    <th>5</th>
+    <th>10</th>
+    <th>20</th>
+    <th>50000</th>
+  </tr>
 </table>
 
-<p><constructor-arg>为Bean的参数构造值</p>
-<h2 id="Bean的依赖注入配置"><a href="#Bean的依赖注入配置" class="headerlink" title="Bean的依赖注入配置"></a>Bean的依赖注入配置</h2><p>两种方式：</p>
+<p>Intset可以看做是特殊的整数数组，具备一些特点：</p>
+<ol>
+<li>Redis回确保Intset中的元素唯一、有序</li>
+<li>具备类型升级机制，可以节省内存空间</li>
+<li>底层采用二分查找方式来查询</li>
+</ol>
+<h3 id="Dict"><a href="#Dict" class="headerlink" title="Dict"></a>Dict</h3><p>键与值的映射关系是通过Dict来实现的。</p>
+<p>Dict由三部分组成，分别是：哈希表（DictHashTable）、哈希节点（DictEntry）、字典（Dict）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictht</span> &#123;</span></span><br><span class="line">  <span class="comment">// entry数组</span></span><br><span class="line">  <span class="comment">// 数组中保存的是指向entry的指针</span></span><br><span class="line">  dictEntry **table;</span><br><span class="line">  <span class="comment">// 哈希表大小</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> size;</span><br><span class="line">  <span class="comment">// 哈希表大小的掩码，总等于size-1</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> sizemask;</span><br><span class="line">  <span class="comment">// entry个数</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> used;</span><br><span class="line">&#125; dictht;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span></span><br><span class="line">  <span class="type">void</span> *key; <span class="comment">// 键</span></span><br><span class="line">  <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">    <span class="type">void</span> *val;</span><br><span class="line">    <span class="type">uint64_t</span> u64;</span><br><span class="line">    <span class="type">int64_t</span> s64;</span><br><span class="line">    <span class="type">double</span> d;</span><br><span class="line">  &#125; v; <span class="comment">// 值</span></span><br><span class="line">   <span class="comment">// 下一个Entry的指针</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125; dictEntry;</span><br></pre></td></tr></table></figure>
+
+<p>当向Dict添加键值对时，Redis首先根据key计算出hash值(h)，然后利用h&amp;sizemask来计算元素应该存储到数组中的哪个索引位置</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">  dictType *type; <span class="comment">// dict类型，内置不同的hash函数</span></span><br><span class="line">  <span class="type">void</span> *privdata; <span class="comment">// 私有数据，在做特殊的hash运算用</span></span><br><span class="line">  dictht ht[<span class="number">2</span>]; <span class="comment">// 一个Dict包含两个哈希表，其中一个是当前数据，另一个一般是空，rehash时使用</span></span><br><span class="line">  <span class="type">long</span> rehashidx; <span class="comment">// rehash的进度，-1表示未进行</span></span><br><span class="line">  <span class="type">int16_t</span> pauserehash <span class="comment">// rahash是否暂停，1则暂停，0则继续</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Dict的扩容"><a href="#Dict的扩容" class="headerlink" title="Dict的扩容"></a>Dict的扩容</h4><p>Dict中的HashTable就是数组结合单向链表的实现，当集合中元素较多时，必然导致hash冲突增多，链表过长，则查询效率会大幅降低</p>
+<p>Dict在每次新增键值对时都会交叉<strong>负载因子</strong>（LoadFactor = used/size），满足以下两种情况时会触发哈希表扩容：</p>
+<ul>
+<li>哈希表的LoadFactor &gt;= 1，并且服务器没有执行BGSAVE或者BGREWRITEAOF等后台进程</li>
+<li>哈希表的LoadFactor &gt; 5</li>
+</ul>
+<h4 id="Dict的收缩"><a href="#Dict的收缩" class="headerlink" title="Dict的收缩"></a>Dict的收缩</h4><p>Dict出了扩容以外，每次删除元素时，也会对负载因子做检查，当LoadFactor&lt;0.1时，会做哈希表收缩</p>
+<h4 id="Dict的rehash"><a href="#Dict的rehash" class="headerlink" title="Dict的rehash"></a>Dict的rehash</h4><p>不论扩容还是收缩，必定会创建新的hash表，导致哈希表的size和sizemask变化，而key的查询与sizemask有关。因此必须对哈希表中的每一个key重新计算索引，插入新的哈希表，这个过程称为<strong>rehash</strong>。过程如下：</p>
+<ol>
+<li>计算新hash表的realeSize，值取决于当前要做的是扩容还是收缩：<ul>
+<li>如果是扩容，则新size为第一个大于等于dict.ht[0].used+1的 $2^n$</li>
+<li>如果是收缩，则新size为第一个大于等于dict.ht[0].used的 $2^n$</li>
+</ul>
+</li>
+<li>按照新的realeSize申请内存空间，创建dictht，并赋值给dict.ht[1]</li>
+<li>设置dict.rehashidx=0，标示开始rehash</li>
+<li>将dict.ht[0]中的每一个dictEntry都rehash到dict.ht[1]</li>
+<li>将dict.ht[1]赋值给dict.ht[0]，给dict.ht[1]初始化为空哈希表，释放原来的dict.ht[0]的内存</li>
+</ol>
+<p>Dict的rehash不是一次性完成的。因为如果Dict中包含数百万的entry，要在一次rehash完成，极有可能导致主线程阻塞。因此Dict的rehash是分多次、渐进式的完成，因此称为<strong>渐进式rehash</strong>。流程如下:</p>
+<ol>
+<li>计算新hash表的realeSize，值取决于当前要做的是扩容还是收缩：<ul>
+<li>如果是扩容，则新size为第一个大于等于dict.ht[0].used+1的 $2^n$</li>
+<li>如果是收缩，则新size为第一个大于等于dict.ht[0].used的 $2^n$</li>
+</ul>
+</li>
+<li>按照新的realeSize申请内存空间，创建dictht，并赋值给dict.ht[1]</li>
+<li>设置dict.rehashidx=0，标示开始rehash</li>
+<li>每次执行新增、查询、修改、删除操作时，都检查一下dict.rehashidx是否大于-1，如果是则将dict.ht[0].table[rehashidx]的entry链表rehash到dict.ht[1]，并且将rehashidx++。直至dict.ht[0]的所有数据都rehash到dict.ht[1]</li>
+<li>将dict.ht[1]赋值给dict.ht[0]，给dict.ht[1]初始化为空哈希表，释放原来的dict.ht[0]的内存</li>
+<li>将rehashidx赋值为-1，代表rehash结束</li>
+<li>在rehash过程中，新增操作，则直接写入ht[1]，查询、修改和删除则会在dict.ht[0]和dict.ht[1]依次查找并执行。这样可以确保ht[0]的数据只减不增，随着rehash最终为空</li>
+</ol>
+<h3 id="ZipList"><a href="#ZipList" class="headerlink" title="ZipList"></a>ZipList</h3><p>ZipList是一种特殊的“双端链表”，由一系列特殊编码的连续内存块组成。可以在任意一端进行压入/弹出操作，并且该操作的时间复杂度为O(1)</p>
 <table>
-  <li>通过Bean的set方法注入 property</li>
-  <li>通过构造Bean的方法进行注入 constructor-arg</li>
+  <tr>
+      <th>zlbytes</th>
+    <th>zltail</th>
+    <th>zllen</th>
+    <th>entry</th>
+    <th>entry</th>
+    <th>...</th>
+    <th>entry</th>
+    <th>zlend</th>
+  </tr>
 </table>
 
-<p>依赖注入的数据类型有如下三种：</p>
-<table>
-  <li>普通数据类型，如：String、int、boolean等，通过value属性指定</li>
-  <li>引用数据类型，如：UserDaoImpl、DataSource等，通过ref属性置顶</li>
-  <li>集合数据类型，如：List、Map、Properties等，使用list使用子标签list，map使用子标签map，set使用子标签set，properties使用prop标签</li>
-</table>
-
-<h3 id="Bean自动装配"><a href="#Bean自动装配" class="headerlink" title="Bean自动装配"></a>Bean自动装配</h3><p>如果被注入的属性类型是Bean引用，name可以在Bean标签中使用autowire属性去配置自动注入方式，属性值有两个：</p>
-<table>
-  <li>byName：通过属性名自动装配，即去匹配setXxx与id="xxx"(name="xxx")是否一致</li>
-  <li>byType：通过Bean的类型从容器中匹配，匹配出多个相同Bean类型时，报错</li>
-</table>
-
-<h1 id="Spring的其他配置标签"><a href="#Spring的其他配置标签" class="headerlink" title="Spring的其他配置标签"></a>Spring的其他配置标签</h1><p>Spring的xml标签大体上分为两类，一种是默认标签，一种是自定义标签</p>
-<table>
-  <li>默认标签：不用额外导入其他命名空间约束的标签，例如Bean标签、Beans标签、import标签、alias标签</li>
-  <li>自定义标签：需要额外引入其他命名空间约束，并通过前缀引用的标签</li>
-</table>
-
-<h3 id="beans-profile"><a href="#beans-profile" class="headerlink" title="beans-profile"></a>beans-profile</h3><p>根据profile的值不同可以区分开发环境，使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.setProperty(&quot;&quot;);</span><br></pre></td></tr></table></figure>
-
-<p>切换开发环境。</p>
-<h3 id="beans-import"><a href="#beans-import" class="headerlink" title="beans-import"></a>beans-import</h3><p>导入其他配置文件，通常将一些小模块的配置文件导入到一个总的配置文件中。</p>
-<h3 id="beans-alias"><a href="#beans-alias" class="headerlink" title="beans-alias"></a>beans-alias</h3><p>为Bean添加别名</p>
-<h1 id="Spring的get方法"><a href="#Spring的get方法" class="headerlink" title="Spring的get方法"></a>Spring的get方法</h1><table>
-    <li>Object getBean(String beanName) 根据beanName从容器中获取Bean实例，要求容器中Bean唯一，返回值为Object，需要强转</li>
-    <li>T getBean(Class type) 根据Class类型从容器中获取Bean实例，要求容器中Bean类型唯一，返回值为Class类型实例，无需强转</li>
-    <li>T getBean(String beanName, Class type) 根据beanName从容器中获得Bean实例，返回值为Class类型实例，无需强转</li>
-</table>
-
-<h1 id="Spring配置非自定义Bean"><a href="#Spring配置非自定义Bean" class="headerlink" title="Spring配置非自定义Bean"></a>Spring配置非自定义Bean</h1><p>在pom导入包后，在相应的xml中配置Bean信息。</p>
-<h1 id="Bean实例化的基本流程"><a href="#Bean实例化的基本流程" class="headerlink" title="Bean实例化的基本流程"></a>Bean实例化的基本流程</h1><p>Spring容器在进行初始化时，会将xml配置的bean标签的<strong>信息</strong>封装成一个BeanDefinition对象，所有的BeanDefinition对象存储在一个名为<br>beanDefinitionMap的Map集合中，Spring框架在对该Map进行遍历，使用反射创建Bean实例对象，创建好的Bean对象存储在名为singletonObjects<br>的Map集合中，当调用getBean方法时最终从该Map集合中取出Bean实例对象返回。</p>
-<p>完整流程</p>
-<table>
-    <li>加载xml配置文件，解析获取配置中的每个bean信息，封装成一个个BeanDefinition对象</li>
-    <li>将BeanDefinition存储在一个名为beanDefinitionMap的Map&lt;String, BeanDefinition>中 &lt;/String></li>
-    <li>ApplicationContext底层遍历beanDefinitionMap，创建Bean实例对象</li>
-    <li>创建好的Bean实例对象，存储在一个名为singletonObjects的Map&lt;String, Object>中</li>
-    <li>当执行applicationContext.getBean(beanName)时，从singletonObject去匹配Bean实例返回</li>
-</table>
-
-<h1 id="Spring后处理器"><a href="#Spring后处理器" class="headerlink" title="Spring后处理器"></a>Spring后处理器</h1><p>Spring的后处理器时Spring对外开发的重要拓展点，允许介入到Bean的整个实例化流程，以达到动态注册BeanDefinition，动态修改BeanDefinition，<br>以及动态修改Bean的作用。Spring主要有两种后处理器：</p>
-<table>
-    <li>BeanFactoryPostProcessor: Bean工厂后处理器，在BeanDefinitionMap填充完毕，Bean实例化之前执行</li>
-    <li>BeanPostProcessor: Bean后处理器，一般在Bean实例化之后，填充到单例池singletonObjects之前执行</li>
-</table>
-
-<h2 id="Bean工厂后处理器-BeanFactoryPostProcessor"><a href="#Bean工厂后处理器-BeanFactoryPostProcessor" class="headerlink" title="Bean工厂后处理器-BeanFactoryPostProcessor"></a>Bean工厂后处理器-BeanFactoryPostProcessor</h2><p>BeanFactoryPostProcessor是一个接口规范，实现了该接口的类只要交由Spring容器管理，Spring就会回调该接口的方法，用于<br>对BeanDefinition注册和修改。</p>
-<p>BeanFactoryPostProcessor定义如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BeanFactoryPostProcessor</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">postProcessBeanFactory</span><span class="params">(ConfigurableListableBeanFactory beanFactory)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Spring提供一个BeanFactoryPostProcessor的子接口BeanDefinitionRegistryPostProcessor专门用于注册<br>BeanDefinition操作</p>
-<h2 id="Bean后处理器-BeanPostProcessor"><a href="#Bean后处理器-BeanPostProcessor" class="headerlink" title="Bean后处理器-BeanPostProcessor"></a>Bean后处理器-BeanPostProcessor</h2><p>Bean被实例化后，到最终缓存到名为singletonObjects单例池之前，中间会经过Bean的初始化过程，称为Bean后处理。<br>跟Bean工厂后处理类似，它也是一个接口，实现了该接口并被容器管理的BeanPostProcessor，会在流程节点上被Spring自动调用</p>
-<h1 id="Spring-Bean的生命周期"><a href="#Spring-Bean的生命周期" class="headerlink" title="Spring Bean的生命周期"></a>Spring Bean的生命周期</h1><p>Spring Bean的生命周期是从Bean实例化之后，即通过反射创建出对象之后，到Bean成为一个完整对象，最终存储到单例池中，<br>这个过程被称作Spring Bean的生命周期。Spring Bean的生命周期大体上分为三个阶段：</p>
-<table>
-    <li>Bean的实例化阶段：Spring框架会取出BeanDefinition的信息进行判断当前Bean的范围是否是singleton，是否是
-不延迟加载的，是否是FactoryBean等，最终将一个普通的singleton的Bean通过反射进行实例化。</li>
-    <li>Bean的初始化阶段：Bean创建之后还仅仅是“半成品”，还需要对Bean实例的属性进行填充、执行一些Aware接口方法、
-执行BeanPostProcessor方法、执行InitializingBean接口的初始化方法、执行自定义初始化init方法等。</li>
-    <li>Bean的完成阶段：经过初始化阶段后，Bean就成为了一个完整的Bean，被存储在单例池singletonObjects中去，即完成了
-Spring Bean的整个生命周期。</li>
-</table>
-
-<p>Spring Bean的初始化过程涉及如下几个过程：</p>
-<table>
-    <li>Bean实例的属性填充</li>
-    <li>Aware接口属性注入</li>
-    <li>BeanPostProcessor的before()方法回调</li>
-    <li>InitializingBean接口的初始化方法回调</li>
-    <li>自定义初始化方法init回调</li>
-    <li>BeanPostProcessor的after()方法回调</li>
-</table>
-
-<p>BeanDefinition中有对当前Bean实体的诸如信息通过属性propertyValues进行了存储。</p>
-<p>Spring在进行属性注入时，分为以下三种情况：</p>
-<table>
-    <li>注入普通属性，String、int或存储基本类型的集合时，直接通过set方法的反射设置进去</li>
-    <li>注入单向对象引用属性时，从容器中getBean获取后通过set方法反射设置进去，如果容器中没有，则先创建被注入对象
-Bean实例后，再进行诸如操作</li>
-    <li>注入双向对象引用属性，涉及循环引用</li>
-</table>
-
-<p>Bean实例属性填充<br>Spring提供了<strong>三级缓存</strong>存储完整Bean实例和半成品Bean实例，用于解决循环引用问题<br>在DefaultListableBeanFactory的上四级父类DefaultSingletonBeanRegistry中提供如下三个Map：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultSingletonBeanRegistry</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 1、最终存储单例Bean成品的容器，即实例化和初始化都完成的Bean，称为“一级缓存”</span></span><br><span class="line">    Map&lt;String, Object&gt; singletonObjects = <span class="keyword">new</span> ConcurrentHashMap(<span class="number">256</span>);</span><br><span class="line">    <span class="comment">// 2、早期Bean单例池，缓存半成品对象，且当前对象已经被其他对象引用，称为“二级缓存”</span></span><br><span class="line">    Map&lt;String, Object&gt; earlySingletonObjects = <span class="keyword">new</span> ConcurrentHashMap(<span class="number">16</span>);</span><br><span class="line">    <span class="comment">// 3、单例Bean的工厂池，缓存半成品对象，对象未被引用，使用时再通过工厂创建Bean，称之为“三级缓存”</span></span><br><span class="line">    Map&lt;String, ObjectFactory&lt;?&gt;&gt; earlySingletonObjects = <span class="keyword">new</span> ConcurrentHashMap(<span class="number">16</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>A和B循环依赖过程结合三级缓存：</p>
-<table>
-    <li>A实例化对象，但尚未初始化，将A存储在三级缓存</li>
-    <li>A属性注入，需要B，从缓存中获取，没有B</li>
-    <li>B实例化对象，但尚未初始化，将B存储在三级缓存</li>
-    <li>B属性依赖注入，需要A，从三级缓存获取A，A从三级缓存移入二级缓存</li>
-    <li>B执行其他生命周期过程，最终成为一个完整Bean，存储到一级缓存，删除二三级缓存</li>
-    <li>A注入B</li>
-    <li>A执行其他生命周期过程，最终成为一个完整Bean，存储到一级缓存，删除二三级缓存</li>
-</table>
-
-<p>常用的Aware接口</p>
-<p>Aware接口是一种框架辅助属性注入的一种思想，Aware可以注入一些底层对象</p>
-<table>
-    <li>接口：ServletContextAware 回调方法：setServletContext(ServletContext context) Spring框架回调方法注入ServletContext对象，web环境下生效</li>
-    <li>接口：BeanFactoryAware 回调方法：setBeanFactory(BeanFactory factory) Spring框架回调方法注入beanFactory对象</li>
-    <li>接口：BeanNameAware 回调方法：setBeanName(String beanName) Spring框架回调方法注入当前Bean在容器中的beanName</li>
-    <li>接口：ApplicationContextAware 回调方法：setApplicationContext(ApplicationContext application) Spring框架回调方法注入applicationContext对象</li>
-</table>
-
-<p><img src="http://rxvukhxe6.hn-bkt.clouddn.com/BeanLifeCycle.png" alt="Bean生命周期" title="Bean生命周期"></p>
-<h1 id="Spring整合MyBatis"><a href="#Spring整合MyBatis" class="headerlink" title="Spring整合MyBatis"></a>Spring整合MyBatis</h1><p>整合包里提供了一个SqlSessionFactoryBean和一个扫描Mapper的配置对象，SqlSessionFactoryBean一旦被实例化，<br>就开始扫描Mapper并通过动态代理产生Mapper的实现类存储到Spring容器中。相关的有如下四个类：</p>
-<table>
-    <li>SqlSessionFactoryBean：需要进行配置，用于提供SqlSessionFactory</li>
-    <li>MapperScannerConfigure：需要进行配置，用于扫描指定mapper注册BeanDefinition</li>
-    <li>MapperFactoryBean：Mapper的FactoryBean，获得指定Mapper时调用getObject方法</li>
-    <li>ClassPathMapperScanner：definition.setAutowireMode(2)修改了自动注入状态，所以MapperFactoryBean中的setSqlSessionFactory会自动注入进去</li>
-</table>
-
-<h1 id="Spring整合第三方框架"><a href="#Spring整合第三方框架" class="headerlink" title="Spring整合第三方框架"></a>Spring整合第三方框架</h1><table>
-    <li>将自定义标签的约束与物理约束文件与网络约束名称的约束以键值对形式存储到一个spring.schemas文件里，该文件存储在类加载路径的META-INF里，Spring会自动加载</li>
-    <li>将自定义命名空间的名称与自定义命名空间的处理器映射关系以键值对形式存在一个叫spring.handlers文件里，该文件存储在类加载路径的META-INF里，Spirng会自动加载</li>
-    <li>准备好NamespaceHandler，如果命名空间里只有一个标签，那么直接在parse方法中进行解析即可，一般解析结果就是注册该标签对应的BeanDefinition。如果命名空间里有多个标签，那么可以在init方法中为每个标签都注册一个BeanDefinitionParser，在执行NamespaceHandler的parse方法时再分流给不同的BeanDefinitionParser进行解析（重写doParse方法）</li>
-</table>
-
-<table>
-    <li>确定命名空间名称、schema虚拟路径、标签名称</li>
-    <li>编写schema约束文件***.xsd</li>
-    <li>在类加载路径下创建META-INF目录，编写约束映射文件spring.schemas和处理器映射文件spring.handlers</li>
-    <li>编写命名空间处理器，在init方法注册Parser</li>
-    <li>编写标签的解析器</li>
-    <li>在applicationContext.xml配置文件中引入命名空间</li>
-    <li>在applicationContext.xml配置文件中使用自定义的标签</li>
-</table>
-# 基于注解的Spring开发
-
-<h2 id="Bean基本注解开发"><a href="#Bean基本注解开发" class="headerlink" title="Bean基本注解开发"></a>Bean基本注解开发</h2><p>基于Bean注解，主要使用注解的方式提到原有xml的<bean>标签及其标签属性的配置</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;&quot;</span> <span class="attr">name</span>=<span class="string">&quot;&quot;</span> <span class="attr">class</span>=<span class="string">&quot;&quot;</span> <span class="attr">scope</span>=<span class="string">&quot;&quot;</span> <span class="attr">lazy-init</span>=<span class="string">&quot;&quot;</span> <span class="attr">init-method</span>=<span class="string">&quot;&quot;</span> <span class="attr">destroy-method</span>=<span class="string">&quot;&quot;</span> <span class="attr">abstract</span>=<span class="string">&quot;&quot;</span> <span class="attr">autowire</span>=<span class="string">&quot;&quot;</span> <span class="attr">factory-bean</span>=<span class="string">&quot;&quot;</span> <span class="attr">factory-method</span>=<span class="string">&quot;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>使用@Component注解替代<bean>标签</p>
 <table>
 <thead>
 <tr>
-<th>xml配置</th>
-<th align="left">注解</th>
-<th>描述</th>
+<th align="center">属性</th>
+<th align="center">类型</th>
+<th align="center">长度</th>
+<th align="center">用途</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><bean id="" class=""></td>
-<td align="left">@Component</td>
-<td>被该注解标识的类，会在指定扫描范围内被Spring加载并实例化</td>
+<td align="center">zlbytes</td>
+<td align="center">uint32_t</td>
+<td align="center">4字节</td>
+<td align="center">记录整个压缩列表占用的内存字节数</td>
 </tr>
 <tr>
-<td><bean scope=""></td>
-<td align="left">@Scope</td>
-<td>在类上或使用了@Bean注解的方法上，标注Bean的作用范围，取值为singleton或prototype</td>
+<td align="center">zltail</td>
+<td align="center">uint32_t</td>
+<td align="center">4字节</td>
+<td align="center">记录压缩列表表尾节点距离压缩列表的起始地址有多少字节，通过这个偏移量，可以确定表尾结点的地址</td>
 </tr>
 <tr>
-<td><bean lazy-init=""></td>
-<td align="left">@Lazy</td>
-<td>在类上或使用了@Bean注解的方法上，标注Bean是否延迟加载，取值为true和false</td>
+<td align="center">zllen</td>
+<td align="center">uint32_t</td>
+<td align="center">2字节</td>
+<td align="center">记录了压缩列表包含的节点数量。最大值为UINT16_MAX(65534)，如果超过这个值，此处会记录为65535，但节点的真实数量需要遍历整个压缩列表才能计算得出</td>
 </tr>
 <tr>
-<td><bean init-method=""></td>
-<td align="left">@PostConstruct</td>
-<td>在方法上使用，标注Bean的实例化后执行的方法</td>
+<td align="center">entry</td>
+<td align="center">列表节点</td>
+<td align="center">不定</td>
+<td align="center">压缩列表包含的各个节点，节点的长度由节点保存的内容决定</td>
 </tr>
 <tr>
-<td><bean destroy-method=""></td>
-<td align="left">@PreDestroy</td>
-<td>在方法上使用，标注Bean的销毁前执行方法</td>
+<td align="center">zlend</td>
+<td align="center">uint8_t</td>
+<td align="center">1字节</td>
+<td align="center">特殊值0xFF（二进制255），用于标记压缩列表的末端</td>
 </tr>
 </tbody></table>
-<p>由于JavaEE开发时分层的，为了每层Bean标识的注解语义化更加明确，@Component又衍生出了如下三个注解：</p>
+<p>ZipList中的Entry不像普通链表那样记录前后节点的指针，因为记录两个指针要占用16字节，浪费内存。而是采用如下结构：</p>
+<table>
+  <tr>
+      <th>previous_entry_length</th>
+    <th>encoding</th>
+    <th>content</th>
+  </tr>
+</table>
+
+<ul>
+<li>previous_entry_length：前一节点的长度，占用1个或5个字节<ul>
+<li>如果前一节点的长度小于254字节，则采用1个字节来保存这个长度值</li>
+<li>如果前一节点的长度大于254字节，则采用5个字节来保存这个长度值，第一个字节为0xfe，后四个字节才是真实长度数据</li>
+<li>encoding：编码属性，记录content的数据类型（字符串还是整数）以及长度，占用1个、2个或5个字节</li>
+<li>contents：负责保存节点的数据，可以使字符串或整数</li>
+</ul>
+</li>
+</ul>
+<p><strong>ZipList中所有存储长度的数值均采用小端字节序，即低位字节在前，高位字节在后</strong></p>
+<h4 id="Encoding编码"><a href="#Encoding编码" class="headerlink" title="Encoding编码"></a>Encoding编码</h4><p>ZipListEntry中的encoding编码分为字符串和整数两种</p>
+<ul>
+<li>字符串：如果encoding是以“00”、“01”或者“10”开头，则证明content是字符串</li>
+</ul>
 <table>
 <thead>
 <tr>
-<th>@Component衍生注解</th>
-<th>描述</th>
+<th align="center">编码</th>
+<th align="center">编码长度</th>
+<th align="center">字符串大小</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>@Repository</td>
-<td>在Dao层类上使用</td>
+<td align="center">|00pppppp|</td>
+<td align="center">1 bytes</td>
+<td align="center">&lt;= 63 bytes</td>
 </tr>
 <tr>
-<td>@Servcie</td>
-<td>在Service层类上使用</td>
+<td align="center">|01pppppp|qqqqqqqq|</td>
+<td align="center">2 bytes</td>
+<td align="center">&lt;= 16383 bytes</td>
 </tr>
 <tr>
-<td>@Controller</td>
-<td>在Web层类上使用</td>
+<td align="center">|10000000|qqqqqqqq|rrrrrrrr|ssssssss|tttttttt|</td>
+<td align="center">5 bytes</td>
+<td align="center">&lt;= 4294967295 bytes</td>
 </tr>
 </tbody></table>
-<h2 id="Bean依赖注入注解开发"><a href="#Bean依赖注入注解开发" class="headerlink" title="Bean依赖注入注解开发"></a>Bean依赖注入注解开发</h2><p>Bean依赖注入的注解，主要使用注解的方式替代xml的<property>标签完成属性的注入操作。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;&quot;</span> <span class="attr">class</span>=<span class="string">&quot;&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;&quot;</span> <span class="attr">value</span>=<span class="string">&quot;&quot;</span>/&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>Spring主要提供如下注解，用于在Bean内部进行属性注入：</p>
+<ul>
+<li>整数：如果encoding是以“11”开始，则证明content是整数，且encoding固定只占用1个字节</li>
+</ul>
 <table>
 <thead>
 <tr>
-<th>属性注入注解</th>
-<th>描述</th>
+<th align="center">编码</th>
+<th align="center">编码长度</th>
+<th align="center">整数类型</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>@Value</td>
-<td>使用在字段或方法上，用于注入普通数据</td>
+<td align="center">11000000</td>
+<td align="center">1</td>
+<td align="center">int16_t (2 bytes)</td>
 </tr>
 <tr>
-<td>@Autowired</td>
-<td>使用在字段或方法上，用于根据类型(byType)注入引用数据</td>
+<td align="center">11010000</td>
+<td align="center">1</td>
+<td align="center">int32_t (4 bytes)</td>
 </tr>
 <tr>
-<td>@Qualifier</td>
-<td>使用在字段或方法上，结合@Autowired，根据名称注入，只在方法上使用不用结合@Autowired</td>
+<td align="center">11100000</td>
+<td align="center">1</td>
+<td align="center">int64_t (8 bytes)</td>
 </tr>
 <tr>
-<td>@Resource</td>
-<td>使用在字段或方法上，根据类型或名称进行注入</td>
+<td align="center">11110000</td>
+<td align="center">1</td>
+<td align="center">24位有符整数 (3 bytes)</td>
+</tr>
+<tr>
+<td align="center">11111110</td>
+<td align="center">1</td>
+<td align="center">8位有符整数 (1 bytes)</td>
+</tr>
+<tr>
+<td align="center">1111xxxx</td>
+<td align="center">1</td>
+<td align="center">直接在xxxx位置保存数值，范围从0001~1101，减1后结果位实际值</td>
 </tr>
 </tbody></table>
-<p>以上注解也可以卸载setter方法上。</p>
-<p>@Autowired 如果同一类型的Bean有多个，尝试根据名字进行二次匹配，匹配不成功再报错。</p>
-<h2 id="非自定义Bean注解开发"><a href="#非自定义Bean注解开发" class="headerlink" title="非自定义Bean注解开发"></a>非自定义Bean注解开发</h2><p>非自定义Bean不能像自定义Bean一样使用Component进行管理，非自定义Bean要通过工厂的方式进行实例化，使用@Bean标注方法即可，@Bean的属性为beanName，如不指定则为当前工厂方法名称。</p>
-<p>@Bean注解下的方法内的依赖会自动根据类型注入</p>
-<p>如果@Bean工厂方法需要<strong>参数</strong>的话，有如下几种注入方式</p>
+<p><strong>ZipList的连锁更新问题</strong></p>
+<h3 id="QuickList"><a href="#QuickList" class="headerlink" title="QuickList"></a>QuickList</h3><p>ZipList虽然节省内存，但申请内存必须是连续空间，如果内存占用较多，申请内存效率很低，为了缓解这个问题，必须限制ZipList的长度和entry大小</p>
+<p>存储大量数据，超出了ZipList最佳上限，可以创建多个ZipList来分片存储数据</p>
+<p>数据拆分后比较分散，不方便管理和查找，Redis在3.2版本引入了新的数据结构QuickList，它是一个双端链表，只不过链表中的每个节点都是一个ZipList</p>
+<p>为了避免QuickList中的每个ZipList中entry过多，Redis提供了一个配置项：<strong>list-max-ziplist-size</strong>来限制</p>
+<ul>
+<li>如果值为正，则代表ZipList的允许的entry个数的最大值</li>
+<li>如果值为负，则代表ZipList的最大内存大小，分5种情况：<ol>
+<li>-1：每个ZipList的内存占用不能超过4kb</li>
+<li>-2：每个ZipList的内存占用不能超过8kb</li>
+<li>-3：每个ZipList的内存占用不能超过16kb</li>
+<li>-4：每个ZipList的内存占用不能超过32kb</li>
+<li>-5：每个ZipList的内存占用不能超过64kb</li>
+</ol>
+</li>
+</ul>
+<p>其默认值为-2</p>
+<p>除了控制ZipList的大小，QuickList还可以对节点的ZipList做压缩。通过配置项lsit-compress-depth来控制。因为链表一般都是从首尾访问较多，所以首尾是不压缩的。这个参数是控制首尾不压缩的节点个数：</p>
+<ul>
+<li>0：特殊值，代表不压缩</li>
+<li>1：标示QuickList的首尾各有1个节点不压缩，中间节点压缩</li>
+<li>2：标示QuickList的首尾各有2个节点不压缩，中间节点压缩</li>
+<li>以此类推</li>
+</ul>
+<p>默认值：0</p>
+<h3 id="SkipList"><a href="#SkipList" class="headerlink" title="SkipList"></a>SkipList</h3><p>SkipList（跳表）首先是链表，但与传统链表相比有几点差异</p>
+<ul>
+<li>元素按照升序排列存储</li>
+<li>节点可能包含多个指针，指针跨度不同</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span> &#123;</span></span><br><span class="line">  <span class="comment">// 头尾节点指针</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">head</span>, *<span class="title">tail</span>;</span></span><br><span class="line">  <span class="comment">// 节点数量</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> length;</span><br><span class="line">  <span class="comment">// 最大的索引层级，默认是1</span></span><br><span class="line">  <span class="type">int</span> level;</span><br><span class="line">&#125; zskiplist;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span></span><br><span class="line">  sds ele; <span class="comment">// 节点存储的值</span></span><br><span class="line">  <span class="type">double</span> score; <span class="comment">// 节点分数，排序，查找用</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>:</span> <span class="comment">// 前一个节点指针</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span> <span class="comment">// 下一个节点指针</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> span; <span class="comment">// 索引跨度</span></span><br><span class="line">  &#125; level[]; <span class="comment">// 多级索引数组</span></span><br><span class="line">&#125; zskiplistNode;</span><br></pre></td></tr></table></figure>
+
+<h4 id="特点-2"><a href="#特点-2" class="headerlink" title="特点"></a>特点</h4><ul>
+<li>跳表是一个双向链表，每个节点都包含score和ele值</li>
+<li>节点按照score值排序，score值一样则按照ele字典排序</li>
+<li>每个节点都可以包含多层指针，层数是1到32之间的随机数</li>
+<li>不同层指针到下一个节点的跨度不同，层级越高，跨度越大</li>
+<li>增删改查效率与红黑树基本一致，实现更加简单</li>
+</ul>
+<h3 id="RedisObject"><a href="#RedisObject" class="headerlink" title="RedisObject"></a>RedisObject</h3><p>Redis中的任意数据类型的键和值都会被封装为一个RedisObject，也叫做Redis对象，源码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">  <span class="type">unsigned</span> type:<span class="number">4</span>; <span class="comment">// 对象类型，分别是string、hash、list、set和zset，占4个bit位</span></span><br><span class="line">  <span class="type">unsigned</span> encoding:<span class="number">4</span>; <span class="comment">// 底层编码方式，共有11种，占4个bit位</span></span><br><span class="line">  <span class="type">unsigned</span> lru:LRU_BITS; <span class="comment">//LRU_BITS为24 lur表示该对象最后一次被访问的时间，其占用24个bit位。便于判断空闲时间太久的key</span></span><br><span class="line">  <span class="type">int</span> refcount; <span class="comment">// 对象引用计数器，计数器为0则说明无人引用，可以被回收</span></span><br><span class="line">  <span class="type">void</span> *ptr; <span class="comment">// 指针，指向存放实际数据的空间</span></span><br><span class="line">&#125; robj;</span><br></pre></td></tr></table></figure>
+
+<p>Redis会根据存储的数据类型不同，选择不同的编码方式。每种数据类型的使用的编码方式如下：</p>
 <table>
-    <li>使用@Autowired根据类型自动进行Bean的匹配，@Autowired可以省略</li>
-    <li>使用@Qualifier根据名称进行Bean的匹配</li>
-    <li>使用@Value根据名称进行普通数据类型匹配</li>
-</table>
-## Bean配置类的注解开发
+<thead>
+<tr>
+<th align="center">数据类型</th>
+<th align="center">编码方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">OBJ_STRING</td>
+<td align="center">int、embstr、raw</td>
+</tr>
+<tr>
+<td align="center">OBJ_LIST</td>
+<td align="center">LinkedList和ZipList（3.2以前）、QuickList（3.2以后）</td>
+</tr>
+<tr>
+<td align="center">OBJ_SET</td>
+<td align="center">intset、HT</td>
+</tr>
+<tr>
+<td align="center">OBJ_ZSET</td>
+<td align="center">ZipLsit、HT、SkipList</td>
+</tr>
+<tr>
+<td align="center">OBJ_HASH</td>
+<td align="center">ZipList、HT</td>
+</tr>
+</tbody></table>
+<h4 id="String"><a href="#String" class="headerlink" title="String"></a>String</h4><p>String是Redis最常见的数据存储类型</p>
+<ul>
+<li><p>其基本编码方式是<strong>RAW</strong>，基于简单动态字符串（SDS）实现，存储上限为512mb</p>
+</li>
+<li><p>如果存的的SDS长度小于44字节，则会采用EMBSTR编码，此时object head与SDS是一段连续空间。申请内存时只需要调用一次内存分配函数，效率更高</p>
+</li>
+<li><p>如果存储的字符串是整数值，并且大小在LONG_MAX范围内，则会采用<strong>INT</strong>编码：直接将数据保存在RedisObject的ptr指针（刚好8字节），不再需要SDS</p>
+</li>
+</ul>
+<style>.tjcihvpytdex{zoom:50%;}</style><img src="/2023/08/09/redis/Stringcunchujiegou.png" class="tjcihvpytdex" alt="Stringcunchujiegou">
 
-<p>@Component等注解替代<bean>标签，定义一个配置类替代原有的xml配置文件，<bean>标签以外的标签，一般都是再配置类上使用注解完成。</p>
-<p>@Configuration注解标识的类为配置类，替代原有xml配置文件，该注解第一个作用时标识该类是一个配置类，第二个作用是具备@Component作用</p>
-<p>@ComponentScan组件扫描配置，替代原有xml文件中的&lt;context:component-scan base-package=””/&gt;</p>
-<p>base-package的配置方法：</p>
-<table>
-    <li>指定一个或多个包名：扫描指定包及其子包下使用注解的类</li>
-    <li>不配置包名：扫描当前@ComponentScan注解配置类所在包及其子包下的类</li>
-</table>
-
-<p>@PropertySource注解用于加载外部properties资源配置，替代原有xml中的&lt;context:property-placeholder location=””/&gt;配置</p>
-<p>@Import用于加载其他配置类，替代原有xml中的&lt;import resource=”classpath:beans.xml”/&gt;配置</p>
-<p>扩展：@Primary注解用于标注相同类型的Bean优先被使用权，@Primary与@Component和@Bean一起使用，标注该Bean的优先级更高，通过类型获取Bean或通过@Autowired根据类型进行注入时，会优先选择优先级更高的</p>
-<p>扩展：@profile注解作痛同于xml配置里的profile属性，是进行环境切换使用的。</p>
-<p>注册@Profile标注再类或方法上，标注当前产生的Bean从属于哪个环境，只有激活了当前环境，被标注的Bean才能被注册到Spring容器里，不指定环境的Bean，任何环境下都能注册到Spring容器里。</p>
-<p>可以使用两种方式指定被激活的环境：</p>
-<table>
-    <li>使用命令行动态参数，虚拟机参数位置加载-Dspring.profiles.active=test</li>
-    <li>使用代码的方式设置环境变量System.setProperty("spring.profiles.active", "test");</li>
-</table>
-
-<h2 id="Spring注解的解析原理"><a href="#Spring注解的解析原理" class="headerlink" title="Spring注解的解析原理"></a>Spring注解的解析原理</h2><p>使用@Component等注解配置完毕后，要配置组件扫描才能使注解生效；</p>
-<p>xml配置组件扫描：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.itheima&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>配置类配置组件扫描：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan(&quot;com.itheima&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="http://rxvukhxe6.hn-bkt.clouddn.com/AnnotationParse.png" title="AnnotationParse"></p>
-<h2 id="Spring注解方式整合第三方框架"><a href="#Spring注解方式整合第三方框架" class="headerlink" title="Spring注解方式整合第三方框架"></a>Spring注解方式整合第三方框架</h2><p>@Import可以导入以下三种类：</p>
-<table>
-    <li>普通的配置类</li>
-    <li>实现ImportSelector接口的类</li>
-    <li>实现ImportBeanDefinitionRegistrar接口的类</li>
-</table>
-# AOP
-
-<h2 id="AOP的概念"><a href="#AOP的概念" class="headerlink" title="AOP的概念"></a>AOP的概念</h2><p>AOP，Aspect Oriented Programming，面向切面编程，是面向对象编程OOP的升华。OOP是纵向对一个事物的抽象，一个对象包括静态的属性信息，包括动态的方法信息等。而AOP是横向的对不同事物的抽象，属性与属性、方法与方法、对象与对象都可以组成一个切面，而用这种思维去设计编程的方式叫做面向切面编程。</p>
-<h2 id="AOP思想的实现方案"><a href="#AOP思想的实现方案" class="headerlink" title="AOP思想的实现方案"></a>AOP思想的实现方案</h2><p>动态代理技术，运行期间，对目标对象的方法进行增强，代理对象同名方法内可以执行原有逻辑的同时嵌入执行其他增强逻辑或其他对象的方法。</p>
+<h4 id="List"><a href="#List" class="headerlink" title="List"></a>List</h4><p>Redis的List类型可以从首、尾操作列表中的元素</p>
+<p>Redis统一采用QuickList来实现List</p>
 
       
     </div>
@@ -1342,7 +1609,7 @@ Bean实例后，再进行诸如操作</li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">1</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
