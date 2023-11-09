@@ -21,17 +21,17 @@
   </script>
 
   <meta property="og:type" content="article">
-<meta property="og:title" content="dataStruct">
-<meta property="og:url" content="http://example.com/2023/09/14/dataStruct/index.html">
+<meta property="og:title" content="Summer Spring">
+<meta property="og:url" content="http://example.com/2023/10/24/Summer-Spring/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-09-14T02:21:41.000Z">
-<meta property="article:modified_time" content="2023-11-08T07:12:23.343Z">
+<meta property="article:published_time" content="2023-10-24T11:14:10.000Z">
+<meta property="article:modified_time" content="2023-10-24T11:26:21.286Z">
 <meta property="article:author" content="MANVND">
 <meta property="article:tag" content="JavaWeb">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2023/09/14/dataStruct/">
+<link rel="canonical" href="http://example.com/2023/10/24/Summer-Spring/">
 
 
 <script id="page-configurations">
@@ -44,7 +44,7 @@
   };
 </script>
 
-  <title>dataStruct | Hexo</title>
+  <title>Summer Spring | Hexo</title>
   
 
 
@@ -149,7 +149,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/14/dataStruct/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/24/Summer-Spring/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -162,7 +162,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          dataStruct
+          Summer Spring
         </h1>
 
         <div class="post-meta">
@@ -171,16 +171,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2023-09-14 10:21:41" itemprop="dateCreated datePublished" datetime="2023-09-14T10:21:41+08:00">2023-09-14</time>
+              <time title="Created: 2023-10-24 19:14:10 / Modified: 19:26:21" itemprop="dateCreated datePublished" datetime="2023-10-24T19:14:10+08:00">2023-10-24</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-11-08 15:12:23" itemprop="dateModified" datetime="2023-11-08T15:12:23+08:00">2023-11-08</time>
-              </span>
 
           
 
@@ -193,53 +187,76 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <html><head></head><body><h1 id="哈希表"><a href="#哈希表" class="headerlink" title="哈希表"></a>哈希表</h1><h2 id="哈希函数"><a href="#哈希函数" class="headerlink" title="哈希函数"></a>哈希函数</h2><h3 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h3><ol>
-<li>一致性</li>
-<li>将不同的字符串映射为不同的数值</li>
-</ol>
-<h2 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h2><ul>
-<li>Hash函数 + 数组</li>
-<li>数组直接映射到内存</li>
-<li>Hash Table具有额外逻辑，它使用Hash函数智能的找到存放元素的位置</li>
-</ul>
-<h2 id="冲突"><a href="#冲突" class="headerlink" title="冲突"></a>冲突</h2><h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><p>两个key的索引相同</p>
-<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><ul>
-<li>链接地址法：将索引相同的key以链表形式组织</li>
-</ul>
-<h2 id="避免冲突"><a href="#避免冲突" class="headerlink" title="避免冲突"></a>避免冲突</h2><h3 id="装载因子"><a href="#装载因子" class="headerlink" title="装载因子"></a>装载因子</h3><ul>
-<li><p>使用的索引个数 / 总共的索引个数</p>
+        <html><head></head><body><h1 id="实现IOC容器"><a href="#实现IOC容器" class="headerlink" title="实现IOC容器"></a>实现IOC容器</h1><p>Spring的核心就是能管理一组Bean，并能自动配置依赖关系的IoC容器。而我们的Summer Framework的核心context模块就是要实现IoC容器。</p>
+<h2 id="设计目标"><a href="#设计目标" class="headerlink" title="设计目标"></a>设计目标</h2><ul>
+<li><p>Spring的IoC容器分为两类：BeanFactory和ApplicationContext，前者总是延迟创建Bean，而后者则在启动时初始化所有Bean。实际使用时，99%都采用ApplicationContext，因此，Summer Framework仅实现ApplicationContext，不支持BeanFactory。</p>
 </li>
-<li><p>调整大小，Resize</p>
-<ul>
-<li>装载因子为75%的时候，可以调整大小，通常为原本大小的两倍</li>
-<li>调整大小也会花费很多时间</li>
-</ul>
+<li><p>早期的Spring容器采用XML来配置Bean，后期又加入了自动扫描包的功能，即通过 <code>&lt;context:component-scan base-package="org.example"/&gt;</code> 的配置。再后来，又加入了Annotation配置，并通过 <code>@ComponentScan</code> 注解实现自动扫描。如果使用Spring Boot，则99%都采用 <code>@ComponentScan</code> 注解方式配置，因此，Summer Framework也仅实现Annotation配置+ <code>@ComponentScan</code> 扫描方式完成容器的配置。</p>
+</li>
+<li><p>此外，Summer Framework仅支持Singleton类型的Bean，不支持Prototype类型的Bean，因为实际使用中，99%都采用Singleton。依赖注入则与Spring保持一致，支持构造方法、Setter方法与字段注入。支持 <code>@Configuration</code> 和 <code>BeanPostProcessor</code> 。至于Spring的其他功能，例如，层级容器、MessageSource、一个Bean允许多个名字等功能，一概不支持！</p>
 </li>
 </ul>
-<h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><p>命令：put(key, value)</p>
-<ol>
-<li>index = hash(key)</li>
-<li>insertNode(index, key, value)</li>
-</ol>
-<p>存在冲突：链接地址法，如果key相同，则直接修改value</p>
-<h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><p>命令：get(key)</p>
-<ol>
-<li>index = hash(key)</li>
-<li>searchNode(index, key)</li>
-</ol>
-<p>当链表过长，将链表转换为红黑树</p>
-<p>链表长度 &gt; 8，转换为红黑树</p>
-<p>红黑树深度 &lt; 6，转换为链表</p>
-<h2 id="扩容"><a href="#扩容" class="headerlink" title="扩容"></a>扩容</h2><ol>
-<li>当发现HashMap内元素过多时，需要扩容</li>
-<li>创建一个新的数组，大小为之前的两倍，即 $2^n$</li>
-<li>遍历旧数组上链表的结点，按照数组大小重新计算index</li>
-<li>按照头插法，把旧数组上的节点插入新的数组里，用新的数组+链表代替旧的即可</li>
-</ol>
-<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><ul>
-<li>HashMap默认长度为16，HashMap长度为 $2^n$</li>
-<li>线程不安全，如果两个线程同时触发扩容操作，就可能出现线程安全问题</li>
-</ul>
+<p>下表列出了Spring Framework和Summer Framework在IoC容器方面的异同：</p>
+<table>
+<thead>
+<tr>
+<th align="center">功能</th>
+<th align="center">Spring Framework</th>
+<th align="center">Summer Framework</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">IoC容器</td>
+<td align="center">支持BeanFactory和ApplicationContext</td>
+<td align="center">仅支持ApplicationContext</td>
+</tr>
+<tr>
+<td align="center">配置方式</td>
+<td align="center">支持XML与Annotation</td>
+<td align="center">仅支持Annotation</td>
+</tr>
+<tr>
+<td align="center">扫描方式</td>
+<td align="center">支持按包名扫描</td>
+<td align="center">支持按包名扫描</td>
+</tr>
+<tr>
+<td align="center">Bean类型</td>
+<td align="center">支持Singleton和Prototype</td>
+<td align="center">仅支持Singleton</td>
+</tr>
+<tr>
+<td align="center">Bean工厂</td>
+<td align="center">支持FactoryBean和@Bean注解</td>
+<td align="center">仅支持@Bean注解</td>
+</tr>
+<tr>
+<td align="center">定制Bean</td>
+<td align="center">支持BeanPostProcessor</td>
+<td align="center">支持BeanPostProcessor</td>
+</tr>
+<tr>
+<td align="center">依赖注入</td>
+<td align="center">支持构造方法、Setter方法与字段</td>
+<td align="center">支持构造方法、Setter方法与字段</td>
+</tr>
+<tr>
+<td align="center">多容器</td>
+<td align="center">支持父子容器</td>
+<td align="center">不支持</td>
+</tr>
+</tbody></table>
+<h2 id="Annotation配置"><a href="#Annotation配置" class="headerlink" title="Annotation配置"></a>Annotation配置</h2><p>从使用者角度，使用IOC容器时，需要定义一个入口配置，它通常长这样：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AppConfig</span> {</span><br><span class="line">  </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>AppConfig</code> 只是一个配置类，它的目的是通过 <code>@ComponentScan</code> 来标识要扫描的Bean的包，如果没有明确写出包名，那么将基于 <code>AppConfig</code> 所在包进行扫描，如果明确写出了包名，则在指定的包下进行扫描。</p>
+<p>在扫描过程中，凡是带有注解 <code>@Component</code> 的类，将被添加到IOC容器进行管理：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Hello</span> {</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>我们用到的很多第三方组件也经常会纳入IOC容器管理。这些第三方组件是不可能带有 <code>@Component</code> 注解的，引入第三方Bean只能通过工厂模式，即在 <code>@Configuration</code> 工厂类中定义带 <code>@Bean</code> 的工厂方法：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DbConfig</span> {</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    DataSource <span class="title function_">createDataSource</span><span class="params">(...)</span> {</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">HikariDataSource</span>(...);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    JdbcTemplate <span class="title function_">createJdbcTemplate</span><span class="params">(...)</span> {</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">JdbcTemplate</span>(...);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p> 基于Annotation配置的IOC容器基本用法如上所述。</p>
 </body></html>
     </div>
 
@@ -257,10 +274,13 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2023/09/18/redis/" rel="next" title="redis">
-      redis <i class="fa fa-chevron-right"></i>
+    <a href="/2023/10/20/Docker/" rel="prev" title="Docker">
+      <i class="fa fa-chevron-left"></i> Docker
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/10/25/Elasticsearch/" rel="next" title="Elasticsearch">
+      Elasticsearch <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -320,7 +340,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E8%A1%A8"><span class="nav-number">1.</span> <span class="nav-text">哈希表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.</span> <span class="nav-text">哈希函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81"><span class="nav-number">1.1.1.</span> <span class="nav-text">特征</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E6%88%90"><span class="nav-number">1.2.</span> <span class="nav-text">组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%B2%E7%AA%81"><span class="nav-number">1.3.</span> <span class="nav-text">冲突</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0"><span class="nav-number">1.3.1.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.2.</span> <span class="nav-text">解决方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E5%86%B2%E7%AA%81"><span class="nav-number">1.4.</span> <span class="nav-text">避免冲突</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A3%85%E8%BD%BD%E5%9B%A0%E5%AD%90"><span class="nav-number">1.4.1.</span> <span class="nav-text">装载因子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%92%E5%85%A5"><span class="nav-number">1.5.</span> <span class="nav-text">插入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.6.</span> <span class="nav-text">查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%AE%B9"><span class="nav-number">1.7.</span> <span class="nav-text">扩容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-number">1.8.</span> <span class="nav-text">知识点</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0IOC%E5%AE%B9%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">实现IOC容器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="nav-number">1.1.</span> <span class="nav-text">设计目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Annotation%E9%85%8D%E7%BD%AE"><span class="nav-number">1.2.</span> <span class="nav-text">Annotation配置</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
