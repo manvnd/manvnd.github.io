@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Redis_Principle">
+<meta property="og:url" content="http://example.com/2023/11/10/redis-principle/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/11/10/redis-principle/Stringcunchujiegou.png">
+<meta property="og:image" content="http://example.com/2023/11/10/redis-principle/SetStruct.png">
+<meta property="og:image" content="http://example.com/2023/11/10/redis-principle/ZSetStruct.png">
+<meta property="og:image" content="http://example.com/2023/11/10/redis-principle/HashStruct.png">
+<meta property="og:image" content="http://example.com/2023/11/10/redis-principle/LinuxRead.png">
+<meta property="og:image" content="http://example.com/2023/11/10/redis-principle/blockIO.png">
+<meta property="og:image" content="http://example.com/2023/11/10/redis-principle/NoBlockIO.png">
+<meta property="og:image" content="http://example.com/Users/yucan/Desktop/redis/IOEpoll.png">
+<meta property="og:image" content="http://example.com/2023/11/10/redis-principle/SelectSequence.png">
+<meta property="og:image" content="http://example.com/2023/11/10/redis-principle/epollSequence.png">
+<meta property="og:image" content="http://example.com/2023/11/10/redis-principle/RedisNetStruct.png">
+<meta property="og:image" content="http://example.com/2023/11/10/redis-principle/RedisDBStruct.png">
+<meta property="og:image" content="http://example.com/2023/11/10/redis-principle/expireMethod.png">
+<meta property="article:published_time" content="2023-11-10T09:22:31.000Z">
+<meta property="article:modified_time" content="2023-11-10T09:27:44.766Z">
+<meta property="article:author" content="MANVND">
+<meta property="article:tag" content="JavaWeb">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/11/10/redis-principle/Stringcunchujiegou.png">
+
+<link rel="canonical" href="http://example.com/2023/11/10/redis-principle/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Redis_Principle | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/10/redis-principle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="MANVND">
+      <meta itemprop="description" content="There is no royal road to learning">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Redis_Principle
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-11-10 17:22:31 / Modified: 17:27:44" itemprop="dateCreated datePublished" datetime="2023-11-10T17:22:31+08:00">2023-11-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <html><head></head><body><h1 id="Redis数据结构"><a href="#Redis数据结构" class="headerlink" title="Redis数据结构"></a>Redis数据结构</h1><h2 id="动态字符串SDS"><a href="#动态字符串SDS" class="headerlink" title="动态字符串SDS"></a>动态字符串SDS</h2><p>Redis中保存的key是字符串，value往往是字符串或者字符串的集合。可见字符串是Redis中最常见的一种数据结构</p>
+<p>不过Redis没有直接使用C语言中的字符串，因为C语言字符串存在很多问题</p>
+<ul>
+<li>获取字符串长度需要通过运算</li>
+<li>非二进制安全</li>
+<li>不可修改</li>
+</ul>
+<p>Redis构建了一种新的字符串结构，称为<strong>简单动态字符串</strong>（Simple Dynamic String），简称SDS。</p>
+<p>例如，执行如下命令:</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set name 虎哥</span><br></pre></td></tr></tbody></table></figure>
+
+<p>那么Redis将会在底层创建两个SDS，其中一个是包含”name”的SDS，另一个是包含”虎哥”的SDS</p>
+<p>Redis是C语言实现的，其中SDS是一个结构体，源码如下：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">attribute__</span> ((__<span class="title">packed__</span>)) <span class="title">sdshdr8</span> {</span></span><br><span class="line">  <span class="type">uint8_t</span> len; <span class="comment">/* buf已保存的字符串字节数，不包含结束标示 */</span></span><br><span class="line">  <span class="type">uint8_t</span> alloc; <span class="comment">/* buf申请的总的字节数，不包含结束标示 */</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">char</span> flags; <span class="comment">/* 不同SDS的头类型，用来控制SDS的头大小 */</span></span><br><span class="line">  <span class="type">char</span> buf[];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>SDS之所以叫做动态字符串，是因为它具备动态扩容的能力，例如一个内容为”hi”的SDS：</p>
+<table>
+  <tbody><tr>
+      <th>len: 2</th>
+    <th>alloc: 2</th>
+    <th>flags: 1</th>
+    <th>h</th>
+    <th>i</th>
+    <th>\0</th>
+  </tr>
+</tbody></table>
+
+
+
+<p>假如给SDS追加一段字符串”,Amy”，首先会申请新的内存空间：</p>
+<ul>
+<li>如果新字符串小于1M，则新空间为扩展后字符串长度的两倍+1</li>
+<li>如果新字符串大于1M，则新空间为扩展后字符串长度+1M+1。称为<strong>内存预分配</strong></li>
+</ul>
+<table>
+  <tbody><tr>
+      <th>len: 6</th>
+    <th>alloc: 12</th>
+    <th>flags: 1</th>
+    <th>h</th>
+    <th>i</th>
+    <th>,</th>
+    <th>A</th>
+    <th>m</th>
+    <th>y</th>
+    <th>\0</th>
+    <th> </th>
+    <th> </th>
+    <th> </th>
+  </tr>
+</tbody></table>
+
+
+
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ol>
+<li>获取字符串长度的时间复杂度为O(1)</li>
+<li>支持动态扩容</li>
+<li>减少内存分配次数</li>
+<li>二进制安全</li>
+</ol>
+<h2 id="IntSet"><a href="#IntSet" class="headerlink" title="IntSet"></a>IntSet</h2><p>IntSet是Redis中set集合的一种实现方式，基于整数数组来实现，并且具备长度可变，有序等特征</p>
+<p>结构如下：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">intset</span> {</span></span><br><span class="line">  <span class="type">uint32_t</span> encoding; <span class="comment">/* 编码方式，支持存放16位、32位、64位整数 */</span></span><br><span class="line">  <span class="type">uint32_t</span> length; <span class="comment">/* 元素个数 */</span></span><br><span class="line">  <span class="type">int8_t</span> contents[]; <span class="comment">/* 整数数组，保存集合数据 */</span></span><br><span class="line">} intset;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中的encoding包含三种模式，表示存储的整数大小不同：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> INTSET_ENC_INT16 (sizeof(int16_t)) <span class="comment">/* 2字节整数，范围类似java的short */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INTSET_ENC_INT32 (sizeof(int32_t)) <span class="comment">/* 4字节整数，范围类似java的int */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INTSET_ENC_INT64 (sizeof(int64_t)) <span class="comment">/* 8字节整数，范围类似java的long */</span></span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>为了方便查找，Redis会将intset中所有的整数按照升序一次保存在contents数组中，结构如图</p>
+<table>
+  <tbody><tr>
+      <th>encoding: INTSET_ENC_INT16</th>
+    <th>length: 3</th>
+    <th>5</th>
+    <th>10</th>
+    <th>20</th>
+  </tr>
+</tbody></table>
+
+
+
+<p>数组中每个数字都在int16_t的范围内，因此采用的编码方式为INTSET_ENC_INT16，每部分占用的字节大小为：</p>
+<ul>
+<li>encoding：4字节</li>
+<li>length：4字节</li>
+<li>contents：2字节*3=6字节</li>
+</ul>
+<p>假设有一个intset，元素为[5, 10, 20]，采用的编码是INTSET_ENC_INT16，则每个整数占2字节：</p>
+<p>向其中添加一个数字：50000，这个数字超过了int16_t的范围，intset会自动<strong>升级</strong>编码方式到合适的大小</p>
+<p>流程如下：</p>
+<ol>
+<li>升级编码为INTSET_ENC_INT32，每个整数占4字节，并按照新的编码方式及元素个数扩容数组</li>
+<li>倒序依次将数组中的元素拷贝到扩容后的正确位置</li>
+<li>将待添加的元素放入数组末尾</li>
+<li>最后，将inset的encoding属性改为INTSET_ENC_INT32，将length属性改为4</li>
+</ol>
+<table>
+  <tbody><tr>
+      <th>encoding: INTSET_ENC_INT32</th>
+    <th>length: 4</th>
+    <th>5</th>
+    <th>10</th>
+    <th>20</th>
+    <th>50000</th>
+  </tr>
+</tbody></table>
+
+
+
+<p>Intset可以看做是特殊的整数数组，具备一些特点：</p>
+<ol>
+<li>Redis回确保Intset中的元素唯一、有序</li>
+<li>具备类型升级机制，可以节省内存空间</li>
+<li>底层采用二分查找方式来查询</li>
+</ol>
+<h2 id="Dict"><a href="#Dict" class="headerlink" title="Dict"></a>Dict</h2><p>键与值的映射关系是通过Dict来实现的。</p>
+<p>Dict由三部分组成，分别是：哈希表（DictHashTable）、哈希节点（DictEntry）、字典（Dict）</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictht</span> {</span></span><br><span class="line">  <span class="comment">// entry数组</span></span><br><span class="line">  <span class="comment">// 数组中保存的是指向entry的指针</span></span><br><span class="line">  dictEntry **table;</span><br><span class="line">  <span class="comment">// 哈希表大小</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> size;</span><br><span class="line">  <span class="comment">// 哈希表大小的掩码，总等于size-1</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> sizemask;</span><br><span class="line">  <span class="comment">// entry个数</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> used;</span><br><span class="line">} dictht;</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> {</span></span><br><span class="line">  <span class="type">void</span> *key; <span class="comment">// 键</span></span><br><span class="line">  <span class="class"><span class="keyword">union</span> {</span></span><br><span class="line">    <span class="type">void</span> *val;</span><br><span class="line">    <span class="type">uint64_t</span> u64;</span><br><span class="line">    <span class="type">int64_t</span> s64;</span><br><span class="line">    <span class="type">double</span> d;</span><br><span class="line">  } v; <span class="comment">// 值</span></span><br><span class="line">   <span class="comment">// 下一个Entry的指针</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span></span><br><span class="line">} dictEntry;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当向Dict添加键值对时，Redis首先根据key计算出hash值(h)，然后利用h&amp;sizemask来计算元素应该存储到数组中的哪个索引位置</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> {</span></span><br><span class="line">  dictType *type; <span class="comment">// dict类型，内置不同的hash函数</span></span><br><span class="line">  <span class="type">void</span> *privdata; <span class="comment">// 私有数据，在做特殊的hash运算用</span></span><br><span class="line">  dictht ht[<span class="number">2</span>]; <span class="comment">// 一个Dict包含两个哈希表，其中一个是当前数据，另一个一般是空，rehash时使用</span></span><br><span class="line">  <span class="type">long</span> rehashidx; <span class="comment">// rehash的进度，-1表示未进行</span></span><br><span class="line">  <span class="type">int16_t</span> pauserehash <span class="comment">// rahash是否暂停，1则暂停，0则继续</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="Dict的扩容"><a href="#Dict的扩容" class="headerlink" title="Dict的扩容"></a>Dict的扩容</h3><p>Dict中的HashTable就是数组结合单向链表的实现，当集合中元素较多时，必然导致hash冲突增多，链表过长，则查询效率会大幅降低</p>
+<p>Dict在每次新增键值对时都会交叉<strong>负载因子</strong>（LoadFactor = used/size），满足以下两种情况时会触发哈希表扩容：</p>
+<ul>
+<li>哈希表的LoadFactor &gt;= 1，并且服务器没有执行BGSAVE或者BGREWRITEAOF等后台进程</li>
+<li>哈希表的LoadFactor &gt; 5</li>
+</ul>
+<h3 id="Dict的收缩"><a href="#Dict的收缩" class="headerlink" title="Dict的收缩"></a>Dict的收缩</h3><p>Dict出了扩容以外，每次删除元素时，也会对负载因子做检查，当LoadFactor&lt;0.1时，会做哈希表收缩</p>
+<h3 id="Dict的rehash"><a href="#Dict的rehash" class="headerlink" title="Dict的rehash"></a>Dict的rehash</h3><p>不论扩容还是收缩，必定会创建新的hash表，导致哈希表的size和sizemask变化，而key的查询与sizemask有关。因此必须对哈希表中的每一个key重新计算索引，插入新的哈希表，这个过程称为<strong>rehash</strong>。过程如下：</p>
+<ol>
+<li>计算新hash表的realeSize，值取决于当前要做的是扩容还是收缩：<ul>
+<li>如果是扩容，则新size为第一个大于等于dict.ht[0].used+1的 $2^n$</li>
+<li>如果是收缩，则新size为第一个大于等于dict.ht[0].used的 $2^n$</li>
+</ul>
+</li>
+<li>按照新的realeSize申请内存空间，创建dictht，并赋值给dict.ht[1]</li>
+<li>设置dict.rehashidx=0，标示开始rehash</li>
+<li>将dict.ht[0]中的每一个dictEntry都rehash到dict.ht[1]</li>
+<li>将dict.ht[1]赋值给dict.ht[0]，给dict.ht[1]初始化为空哈希表，释放原来的dict.ht[0]的内存</li>
+</ol>
+<p>Dict的rehash不是一次性完成的。因为如果Dict中包含数百万的entry，要在一次rehash完成，极有可能导致主线程阻塞。因此Dict的rehash是分多次、渐进式的完成，因此称为<strong>渐进式rehash</strong>。流程如下:</p>
+<ol>
+<li>计算新hash表的realeSize，值取决于当前要做的是扩容还是收缩：<ul>
+<li>如果是扩容，则新size为第一个大于等于dict.ht[0].used+1的 $2^n$</li>
+<li>如果是收缩，则新size为第一个大于等于dict.ht[0].used的 $2^n$</li>
+</ul>
+</li>
+<li>按照新的realeSize申请内存空间，创建dictht，并赋值给dict.ht[1]</li>
+<li>设置dict.rehashidx=0，标示开始rehash</li>
+<li>每次执行新增、查询、修改、删除操作时，都检查一下dict.rehashidx是否大于-1，如果是则将dict.ht[0].table[rehashidx]的entry链表rehash到dict.ht[1]，并且将rehashidx++。直至dict.ht[0]的所有数据都rehash到dict.ht[1]</li>
+<li>将dict.ht[1]赋值给dict.ht[0]，给dict.ht[1]初始化为空哈希表，释放原来的dict.ht[0]的内存</li>
+<li>将rehashidx赋值为-1，代表rehash结束</li>
+<li>在rehash过程中，新增操作，则直接写入ht[1]，查询、修改和删除则会在dict.ht[0]和dict.ht[1]依次查找并执行。这样可以确保ht[0]的数据只减不增，随着rehash最终为空</li>
+</ol>
+<h2 id="ZipList"><a href="#ZipList" class="headerlink" title="ZipList"></a>ZipList</h2><p>ZipList是一种特殊的“双端链表”，由一系列特殊编码的连续内存块组成。可以在任意一端进行压入/弹出操作，并且该操作的时间复杂度为O(1)</p>
+<table>
+  <tbody><tr>
+      <th>zlbytes</th>
+    <th>zltail</th>
+    <th>zllen</th>
+    <th>entry</th>
+    <th>entry</th>
+    <th>...</th>
+    <th>entry</th>
+    <th>zlend</th>
+  </tr>
+</tbody></table>
+
+
+
+<table>
+<thead>
+<tr>
+<th align="center">属性</th>
+<th align="center">类型</th>
+<th align="center">长度</th>
+<th align="center">用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">zlbytes</td>
+<td align="center">uint32_t</td>
+<td align="center">4字节</td>
+<td align="center">记录整个压缩列表占用的内存字节数</td>
+</tr>
+<tr>
+<td align="center">zltail</td>
+<td align="center">uint32_t</td>
+<td align="center">4字节</td>
+<td align="center">记录压缩列表表尾节点距离压缩列表的起始地址有多少字节，通过这个偏移量，可以确定表尾结点的地址</td>
+</tr>
+<tr>
+<td align="center">zllen</td>
+<td align="center">uint32_t</td>
+<td align="center">2字节</td>
+<td align="center">记录了压缩列表包含的节点数量。最大值为UINT16_MAX(65534)，如果超过这个值，此处会记录为65535，但节点的真实数量需要遍历整个压缩列表才能计算得出</td>
+</tr>
+<tr>
+<td align="center">entry</td>
+<td align="center">列表节点</td>
+<td align="center">不定</td>
+<td align="center">压缩列表包含的各个节点，节点的长度由节点保存的内容决定</td>
+</tr>
+<tr>
+<td align="center">zlend</td>
+<td align="center">uint8_t</td>
+<td align="center">1字节</td>
+<td align="center">特殊值0xFF（二进制255），用于标记压缩列表的末端</td>
+</tr>
+</tbody></table>
+<p>ZipList中的Entry不像普通链表那样记录前后节点的指针，因为记录两个指针要占用16字节，浪费内存。而是采用如下结构：</p>
+<table>
+  <tbody><tr>
+      <th>previous_entry_length</th>
+    <th>encoding</th>
+    <th>content</th>
+  </tr>
+</tbody></table>
+
+
+
+<ul>
+<li>previous_entry_length：前一节点的长度，占用1个或5个字节<ul>
+<li>如果前一节点的长度小于254字节，则采用1个字节来保存这个长度值</li>
+<li>如果前一节点的长度大于254字节，则采用5个字节来保存这个长度值，第一个字节为0xfe，后四个字节才是真实长度数据</li>
+<li>encoding：编码属性，记录content的数据类型（字符串还是整数）以及长度，占用1个、2个或5个字节</li>
+<li>contents：负责保存节点的数据，可以使字符串或整数</li>
+</ul>
+</li>
+</ul>
+<p><strong>ZipList中所有存储长度的数值均采用小端字节序，即低位字节在前，高位字节在后</strong></p>
+<h3 id="Encoding编码"><a href="#Encoding编码" class="headerlink" title="Encoding编码"></a>Encoding编码</h3><p>ZipListEntry中的encoding编码分为字符串和整数两种</p>
+<ul>
+<li>字符串：如果encoding是以“00”、“01”或者“10”开头，则证明content是字符串</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">编码</th>
+<th align="center">编码长度</th>
+<th align="center">字符串大小</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">|00pppppp|</td>
+<td align="center">1 bytes</td>
+<td align="center">&lt;= 63 bytes</td>
+</tr>
+<tr>
+<td align="center">|01pppppp|qqqqqqqq|</td>
+<td align="center">2 bytes</td>
+<td align="center">&lt;= 16383 bytes</td>
+</tr>
+<tr>
+<td align="center">|10000000|qqqqqqqq|rrrrrrrr|ssssssss|tttttttt|</td>
+<td align="center">5 bytes</td>
+<td align="center">&lt;= 4294967295 bytes</td>
+</tr>
+</tbody></table>
+<ul>
+<li>整数：如果encoding是以“11”开始，则证明content是整数，且encoding固定只占用1个字节</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">编码</th>
+<th align="center">编码长度</th>
+<th align="center">整数类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">11000000</td>
+<td align="center">1</td>
+<td align="center">int16_t (2 bytes)</td>
+</tr>
+<tr>
+<td align="center">11010000</td>
+<td align="center">1</td>
+<td align="center">int32_t (4 bytes)</td>
+</tr>
+<tr>
+<td align="center">11100000</td>
+<td align="center">1</td>
+<td align="center">int64_t (8 bytes)</td>
+</tr>
+<tr>
+<td align="center">11110000</td>
+<td align="center">1</td>
+<td align="center">24位有符整数 (3 bytes)</td>
+</tr>
+<tr>
+<td align="center">11111110</td>
+<td align="center">1</td>
+<td align="center">8位有符整数 (1 bytes)</td>
+</tr>
+<tr>
+<td align="center">1111xxxx</td>
+<td align="center">1</td>
+<td align="center">直接在xxxx位置保存数值，范围从0001~1101，减1后结果位实际值</td>
+</tr>
+</tbody></table>
+<p><strong>ZipList的连锁更新问题</strong></p>
+<h2 id="QuickList"><a href="#QuickList" class="headerlink" title="QuickList"></a>QuickList</h2><p>ZipList虽然节省内存，但申请内存必须是连续空间，如果内存占用较多，申请内存效率很低，为了缓解这个问题，必须限制ZipList的长度和entry大小</p>
+<p>存储大量数据，超出了ZipList最佳上限，可以创建多个ZipList来分片存储数据</p>
+<p>数据拆分后比较分散，不方便管理和查找，Redis在3.2版本引入了新的数据结构QuickList，它是一个双端链表，只不过链表中的每个节点都是一个ZipList</p>
+<p>为了避免QuickList中的每个ZipList中entry过多，Redis提供了一个配置项：<strong>list-max-ziplist-size</strong>来限制</p>
+<ul>
+<li>如果值为正，则代表ZipList的允许的entry个数的最大值</li>
+<li>如果值为负，则代表ZipList的最大内存大小，分5种情况：<ol>
+<li>-1：每个ZipList的内存占用不能超过4kb</li>
+<li>-2：每个ZipList的内存占用不能超过8kb</li>
+<li>-3：每个ZipList的内存占用不能超过16kb</li>
+<li>-4：每个ZipList的内存占用不能超过32kb</li>
+<li>-5：每个ZipList的内存占用不能超过64kb</li>
+</ol>
+</li>
+</ul>
+<p>其默认值为-2</p>
+<p>除了控制ZipList的大小，QuickList还可以对节点的ZipList做压缩。通过配置项lsit-compress-depth来控制。因为链表一般都是从首尾访问较多，所以首尾是不压缩的。这个参数是控制首尾不压缩的节点个数：</p>
+<ul>
+<li>0：特殊值，代表不压缩</li>
+<li>1：标示QuickList的首尾各有1个节点不压缩，中间节点压缩</li>
+<li>2：标示QuickList的首尾各有2个节点不压缩，中间节点压缩</li>
+<li>以此类推</li>
+</ul>
+<p>默认值：0</p>
+<h2 id="SkipList"><a href="#SkipList" class="headerlink" title="SkipList"></a>SkipList</h2><p>SkipList（跳表）首先是链表，但与传统链表相比有几点差异</p>
+<ul>
+<li>元素按照升序排列存储</li>
+<li>节点可能包含多个指针，指针跨度不同</li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span> {</span></span><br><span class="line">  <span class="comment">// 头尾节点指针</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">head</span>, *<span class="title">tail</span>;</span></span><br><span class="line">  <span class="comment">// 节点数量</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> length;</span><br><span class="line">  <span class="comment">// 最大的索引层级，默认是1</span></span><br><span class="line">  <span class="type">int</span> level;</span><br><span class="line">} zskiplist;</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> {</span></span><br><span class="line">  sds ele; <span class="comment">// 节点存储的值</span></span><br><span class="line">  <span class="type">double</span> score; <span class="comment">// 节点分数，排序，查找用</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>:</span> <span class="comment">// 前一个节点指针</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> {</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span> <span class="comment">// 下一个节点指针</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> span; <span class="comment">// 索引跨度</span></span><br><span class="line">  } level[]; <span class="comment">// 多级索引数组</span></span><br><span class="line">} zskiplistNode;</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>跳表是一个双向链表，每个节点都包含score和ele值</li>
+<li>节点按照score值排序，score值一样则按照ele字典排序</li>
+<li>每个节点都可以包含多层指针，层数是1到32之间的随机数</li>
+<li>不同层指针到下一个节点的跨度不同，层级越高，跨度越大</li>
+<li>增删改查效率与红黑树基本一致，实现更加简单</li>
+</ul>
+<h2 id="RedisObject"><a href="#RedisObject" class="headerlink" title="RedisObject"></a>RedisObject</h2><p>Redis中的任意数据类型的键和值都会被封装为一个RedisObject，也叫做Redis对象，源码如下：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> {</span></span><br><span class="line">  <span class="type">unsigned</span> type:<span class="number">4</span>; <span class="comment">// 对象类型，分别是string、hash、list、set和zset，占4个bit位</span></span><br><span class="line">  <span class="type">unsigned</span> encoding:<span class="number">4</span>; <span class="comment">// 底层编码方式，共有11种，占4个bit位</span></span><br><span class="line">  <span class="type">unsigned</span> lru:LRU_BITS; <span class="comment">//LRU_BITS为24 lur表示该对象最后一次被访问的时间，其占用24个bit位。便于判断空闲时间太久的key</span></span><br><span class="line">  <span class="type">int</span> refcount; <span class="comment">// 对象引用计数器，计数器为0则说明无人引用，可以被回收</span></span><br><span class="line">  <span class="type">void</span> *ptr; <span class="comment">// 指针，指向存放实际数据的空间</span></span><br><span class="line">} robj;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Redis会根据存储的数据类型不同，选择不同的编码方式。每种数据类型的使用的编码方式如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">数据类型</th>
+<th align="center">编码方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">OBJ_STRING</td>
+<td align="center">int、embstr、raw</td>
+</tr>
+<tr>
+<td align="center">OBJ_LIST</td>
+<td align="center">LinkedList和ZipList（3.2以前）、QuickList（3.2以后）</td>
+</tr>
+<tr>
+<td align="center">OBJ_SET</td>
+<td align="center">intset、HT</td>
+</tr>
+<tr>
+<td align="center">OBJ_ZSET</td>
+<td align="center">ZipLsit、HT、SkipList</td>
+</tr>
+<tr>
+<td align="center">OBJ_HASH</td>
+<td align="center">ZipList、HT</td>
+</tr>
+</tbody></table>
+<h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><p>String是Redis最常见的数据存储类型</p>
+<ul>
+<li><p>其基本编码方式是<strong>RAW</strong>，基于简单动态字符串（SDS）实现，存储上限为512mb</p>
+</li>
+<li><p>如果存的的SDS长度小于44字节，则会采用EMBSTR编码，此时object head与SDS是一段连续空间。申请内存时只需要调用一次内存分配函数，效率更高</p>
+</li>
+<li><p>如果存储的字符串是整数值，并且大小在LONG_MAX范围内，则会采用<strong>INT</strong>编码：直接将数据保存在RedisObject的ptr指针（刚好8字节），不再需要SDS</p>
+</li>
+</ul>
+<img src="/2023/11/10/redis-principle/Stringcunchujiegou.png" alt="Stringcunchujiegou" style="zoom:50%;">
+
+<h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><p>Redis的List类型可以从首、尾操作列表中的元素</p>
+<p>Redis统一采用QuickList来实现List</p>
+<h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><p>Set是Redis中的单列集合，满足下列特点：</p>
+<ul>
+<li><p>不保证有序性</p>
+</li>
+<li><p>保证元素唯一（可以判断元素是否存在）</p>
+</li>
+<li><p>求交集、并集、差集</p>
+</li>
+<li><p>Set使用HashTable存储，也就是Redis中的Dict，不过Dict是双列集合（可以存键、值对）</p>
+</li>
+</ul>
+<p>Set是Redis中的集合，不一定保证元素有序，可以满足元素唯一、查询效率要就极高</p>
+<ul>
+<li>为了查询效率和唯一性，set采用HT编码（Dict）。Dict中的key用来存储元素，value统一为null</li>
+<li>当存储的所有数据都是整数，而且元素数量不超过set-max-intset-entries时，Set会采用IntSet编码，以节省内存</li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">robj *<span class="title function_">setTypeCreate</span><span class="params">(sds value)</span> {</span><br><span class="line">  <span class="comment">// 判断value是否是数值类型 long long</span></span><br><span class="line">  <span class="keyword">if</span> (isSdsRepresentableAsLongLong(value, <span class="literal">NULL</span>) == C_OK)</span><br><span class="line">    <span class="comment">// 如果是数值类型，则采用IntSet编码</span></span><br><span class="line">    <span class="keyword">return</span> createIntsetObject();</span><br><span class="line">  <span class="comment">// 否则采用默认编码，也就是HT</span></span><br><span class="line">  <span class="keyword">return</span> createSetObject();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">robj *<span class="title function_">createIntsetObject</span><span class="params">(<span class="type">void</span>)</span> {</span><br><span class="line">  <span class="comment">// 初始化INTSET并申请内存空间</span></span><br><span class="line">  intset *is = intsetNew();</span><br><span class="line">  <span class="comment">// 创建RedisObject</span></span><br><span class="line">  robj *o = createObject(OBJ_SET, is);</span><br><span class="line">  <span class="comment">// 指定编码为INTSET</span></span><br><span class="line">  o -&gt; encoding = OBJ_ENCODING_INTSET;</span><br><span class="line">  <span class="keyword">return</span> o;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">robj *<span class="title function_">createSetObject</span><span class="params">(<span class="type">void</span>)</span> {</span><br><span class="line">  <span class="comment">// 初始化Dict类型，并申请内存</span></span><br><span class="line">  dict *d = dictCreate(&amp;setDictType, <span class="literal">NULL</span>);</span><br><span class="line">  <span class="comment">// 创建RedisObject</span></span><br><span class="line">  robj *o = createObject(OBJ_SET, d);</span><br><span class="line">  <span class="comment">// 设置encoding为HT</span></span><br><span class="line">  o -&gt; encoding = OBJ_ENCODING_HT;</span><br><span class="line">  <span class="keyword">return</span> o;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Set会根据数据类型更改编码。如如果Set原本编码是IntSet，此时传入float，则Set会更改编码为HT编码<br>set-max-intset-entries的默认值为512</p>
+<p><img src="/2023/11/10/redis-principle/SetStruct.png" alt="SetStruct"></p>
+<h3 id="ZSet"><a href="#ZSet" class="headerlink" title="ZSet"></a>ZSet</h3><p>ZSet也就是SortedSet，其中每一个元素都需要指定一个score值和member值</p>
+<ul>
+<li>可以根据score值排序</li>
+<li>member必须唯一</li>
+<li>可以根据member查询分数</li>
+</ul>
+<p>ZSet底层数据结构必须满足<strong>键值存储</strong>、<strong>键必须唯一</strong>、<strong>可排序</strong>这几个需求。</p>
+<ul>
+<li>SkipList：可以排序，并且同时存储score和ele值（member）</li>
+<li>HT（Dict）：可以键值存储，并且可以根据key获取value（无法排序）</li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// zset结构</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zset</span> {</span></span><br><span class="line">  <span class="comment">// Dict指针</span></span><br><span class="line">  dict *dict;</span><br><span class="line">  <span class="comment">// SkipList指针</span></span><br><span class="line">  zskiplist *zsl;</span><br><span class="line">} zset;</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">robj *<span class="title function_">createZsetObject</span><span class="params">(<span class="type">void</span>)</span> {</span><br><span class="line">  zset *zs = zmalloc(<span class="keyword">sizeof</span>(*zs));</span><br><span class="line">  robj *o;</span><br><span class="line">  <span class="comment">// 创建Dict</span></span><br><span class="line">  zs -&gt; dict = dictCreate(&amp;zsetDictType, <span class="literal">NULL</span>);</span><br><span class="line">  <span class="comment">// 创建SkipList</span></span><br><span class="line">  zs -&gt; zsl = zslCreate();</span><br><span class="line">  o = createObject(OBJ_ZSET, zs);</span><br><span class="line">  o -&gt; encoding = OBJ_ENCODING_SKIPLIST;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>第一种方式：HT和SkipList组合使用，速度快，但空间占用大</li>
+</ul>
+<p><img src="/2023/11/10/redis-principle/ZSetStruct.png" alt="ZSetStruct"></p>
+<ul>
+<li>第二种方式：使用ZipList代替SkipList存储，节省内存空间</li>
+</ul>
+<p>需要同时满足两个条件：</p>
+<ol>
+<li>元素数量小于zset_max_ziplist_entries，默认值为128</li>
+<li>每个元素都小于zset_max_ziplist_value自己诶，默认值64</li>
+</ol>
+<p>与Set类似，当不满足条件会触发编码转换</p>
+<p>ziplist本身没有排序功能，而且没有键值对概念，因此需要有zset通过编码实现：</p>
+<ul>
+<li>ZipList是连续内存，因此score和elemet是紧凑在一起的两个entry，element在前，score在后</li>
+<li>score越小越接近队首，score越大越接近队尾，按照score升序排列</li>
+</ul>
+<h2 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h2><p>Hash结构与Redis中的ZSet非常类似：</p>
+<ul>
+<li>都是键值存储</li>
+<li>都需求根据键获取值</li>
+<li>键必须唯一</li>
+</ul>
+<p>区别如下：</p>
+<ul>
+<li>ZSet的键是member，值是score；hash的键和值都是任意键</li>
+<li>ZSet要根据score排序；hash无需排序</li>
+</ul>
+<p>Hash底层采用的编码与ZSet基本一致，只需要把排序有关的SkipList去掉即可</p>
+<ul>
+<li>Hash结构默认采用ZipList编码，以节省内存。ZipList中相邻的两个entry分别保存field和value</li>
+<li>当数据量较大时，Hash结构会转为HT编码，也就是Dict，触发的条件有两个：<ul>
+<li>ZipList中的元素数量超过了hash-max-ziplist-entries（默认512）</li>
+<li>ZipList中的任意entry大小超过了hash-max-ziplist-value（默认64字节）</li>
+</ul>
+</li>
+</ul>
+<img src="/2023/11/10/redis-principle/HashStruct.png" alt="HashStruct" style="zoom:50%;">
+
+<h1 id="Redis网络模型"><a href="#Redis网络模型" class="headerlink" title="Redis网络模型"></a>Redis网络模型</h1><h2 id="用户空间和内核空间"><a href="#用户空间和内核空间" class="headerlink" title="用户空间和内核空间"></a>用户空间和内核空间</h2><p>为了避免用户应用导致冲突甚至内核崩溃，用户应用与内核是分离的：</p>
+<ul>
+<li>进程的寻址空间会划分为两部分：<strong>内核空间</strong>、<strong>用户空间</strong></li>
+<li><strong>用户空间</strong>只能执行受限的命令（Ring3），而且不能直接调用系统资源，必须通过内核提供的接口来访问</li>
+<li><strong>内核空间</strong>可以执行特权命令（Ring0），调用一切系统资源</li>
+</ul>
+<p>Linux系统为了提高IO效率，会在用户控件和内核空间都加入缓冲区：</p>
+<ul>
+<li>写数据时，要把用户缓冲数据拷贝到内核缓冲区，然后写入设备</li>
+<li>读数据时，要从设备读取数据到内核缓冲区，然后拷贝到用户缓冲区</li>
+</ul>
+<img src="/2023/11/10/redis-principle/LinuxRead.png" alt="LinuxRead" style="zoom:50%;">
+
+<h2 id="阻塞IO"><a href="#阻塞IO" class="headerlink" title="阻塞IO"></a>阻塞IO</h2><p>阻塞IO，两个阶段都必须阻塞等待：</p>
+<img src="/2023/11/10/redis-principle/blockIO.png" alt="blockIO" style="zoom:50%;">
+
+<h2 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h2><p>非阻塞IO的recfrom操作会立即返回结果而不是阻塞用户进程</p>
+<img src="/2023/11/10/redis-principle/NoBlockIO.png" alt="NoBlockIO" style="zoom:50%;">
+
+<p>非阻塞IO模型中，用户进程在第一阶段是非阻塞的，第二阶段是阻塞状态。虽然是非阻塞，但性能没有得到提高。而且忙等机制会导致CPU空转，CPU使用率暴增</p>
+<h2 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h2><p><strong>文件描述符</strong>（File Descriptor）：简称FD，是一个从0开始递增的无符号整数，用来关联Linux中的一个文件。在Linux中，一切皆文件，例如常规文件、视频、硬件设备等，当然也包裹网络套接字（Socket）</p>
+<p><strong>IO多路复用</strong>：利用单个线程来监听多个FD，并在某个FD可读、可写时得到通知，从而避免无效的等待，充分利用CPU资源</p>
+<p><img src="/Users/yucan/Desktop/redis/IOEpoll.png" alt="IOEpoll"></p>
+<p>监听FD的方式、通知的方式有多种实现，常见的有:</p>
+<ul>
+<li>select</li>
+<li>poll</li>
+<li>epoll</li>
+</ul>
+<p>差异：</p>
+<ul>
+<li>select和poll只会通知用户进程有FD就绪，但不确定具体是哪个FD，需要用户进程逐个遍历FD来确认</li>
+<li>epoll则会在通知用户进程FD就绪的同时，把已就绪的FD写入用户空间</li>
+</ul>
+<h3 id="select"><a href="#select" class="headerlink" title="select"></a>select</h3><p><strong>select</strong>是Linux中最早的I/O多路复用实现方案：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义类型别名 __fd_mask，本质是 long int</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">int</span> __fd_mask;</span><br><span class="line"></span><br><span class="line"><span class="comment">// fd_set 记录要监听的fd集合，及其对应状态</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">  <span class="comment">// fds_bits是long类型数组，长度为 1024/32 = 32</span></span><br><span class="line">  <span class="comment">// 共1024个bit位，每个bit位代表一个fd，0代表未就绪，1代表就绪</span></span><br><span class="line">  __fd_mask fds_bits[__FD_SETSIZE /__NFDBITS];</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">} fd_set;</span><br><span class="line"></span><br><span class="line"><span class="comment">// select函数，用来监听多个fd的集合</span></span><br><span class="line"><span class="type">int</span> select {</span><br><span class="line">  <span class="type">int</span> nfds, <span class="comment">// 要监听的fd_set的最大 fd + 1</span></span><br><span class="line">  fd_set *readfds, <span class="comment">// 要监听读事件的fd集合</span></span><br><span class="line">  fd_set *writefds, <span class="comment">// 要监听写事件的fd集合</span></span><br><span class="line">  fd_set *exceptfds, <span class="comment">// 要监听异常事件的fd集合</span></span><br><span class="line">  <span class="comment">// 超时时间，null-永不超时；0-不阻塞等待；大于0-固定等待时间</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> *<span class="title">timeout</span></span></span><br><span class="line"><span class="class">};</span></span><br></pre></td></tr></tbody></table></figure>
+
+<img src="/2023/11/10/redis-principle/SelectSequence.png" alt="SelectSequence" style="zoom:50%;">
+
+<p>存在的问题：</p>
+<ul>
+<li>需要将整个fd_set从用户空间拷贝到内核空间，selec结束还要再次拷贝回用户空间</li>
+<li>select无法得知具体是哪个fd就绪，需要遍历整个fd_set</li>
+<li>fd_set监听的fd数量不能超过1024</li>
+</ul>
+<h3 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h3><p><strong>poll</strong>模式对select模式做了简单改进，但性能提升不明显</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pollfd中的时间类型</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> POLLIN <span class="comment">// 可读事件</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> POLLOUT <span class="comment">// 可写事件</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> POLLERR <span class="comment">// 错误事件</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> POLLNVAL <span class="comment">// fd未打开</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// pollfd结构</span></span><br><span class="line">strcut pollfd {</span><br><span class="line">  <span class="type">int</span> fd; <span class="comment">// 要监听的fd</span></span><br><span class="line">  <span class="type">short</span> <span class="type">int</span> events; <span class="comment">// 要监听的事件类型：读、写、异常</span></span><br><span class="line">  <span class="type">short</span> <span class="type">int</span> revetns; <span class="comment">// 实际发生的事件类型</span></span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="comment">// poll函数</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">poll</span><span class="params">(</span></span><br><span class="line"><span class="params">	<span class="keyword">struct</span> pollfd *fds, <span class="comment">// pollfd数组，可以自定义大小</span></span></span><br><span class="line"><span class="params">  <span class="type">ndfd_t</span> nfds <span class="comment">// 数组元素个数</span></span></span><br><span class="line"><span class="params">)</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>IO流程：</p>
+<ol>
+<li>创建pollfd数组，向其中添加关注的fd信息，数组大小自定义</li>
+<li>调用poll函数，将pollfd数组拷贝到内核空间，转链表存储，无上限</li>
+<li>内核遍历fd，判断是否就绪</li>
+<li>数据就绪或超时后，拷贝pollfd数组到用户空间，返回就绪fd数量n</li>
+<li>用户进程判断n是否大于0</li>
+<li>大于0则遍历pollfd数组，找到就绪的fd</li>
+</ol>
+<p>与select对比：</p>
+<ul>
+<li>select模式的fd_set大小固定为1024，而pollfd在内核中采用链表，理论上无上限</li>
+<li>监听FD越多，每次遍历消耗时间也越久，性能反而会下降</li>
+</ul>
+<h3 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h3><p>epoll模式是对select和poll的改进，它提供了三个函数</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">strcut eventpoll {</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">rbr</span>;</span> <span class="comment">// 一颗红黑树，记录要监听的FD</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">rdlsit</span>;</span> <span class="comment">// 一个链表，记录就绪的FD</span></span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1.会在内核创建eventpoll结构体，返回对应的句柄epfd</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">epoll_create</span><span class="params">(<span class="type">int</span> size)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2.将一个FD添加到epoll的红黑树中，并设置ep_poll_callback</span></span><br><span class="line"><span class="comment">// callback触发时，就把对应的FD加入到rdlist这个就绪列表中</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">epoll_ctl</span><span class="params">(</span></span><br><span class="line"><span class="params">	<span class="type">int</span> epfd <span class="comment">// epoll实例的句柄</span></span></span><br><span class="line"><span class="params">  <span class="type">int</span> op, <span class="comment">// 要执行的操作，包括: ADD、MOD、DEL</span></span></span><br><span class="line"><span class="params">  <span class="type">int</span> fd, <span class="comment">// 要监听的FD</span></span></span><br><span class="line"><span class="params">  <span class="keyword">struct</span> epoll_event *event <span class="comment">// 要监听的事件类型：读、写、异常等</span></span></span><br><span class="line"><span class="params">)</span>;</span><br><span class="line"><span class="comment">// 3.检查rdlist列表是否为空，不为空则返回就绪的FD的数量</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">epoll_wait</span><span class="params">(</span></span><br><span class="line"><span class="params">	<span class="type">int</span> epfd, <span class="comment">// eventpoll实例的句柄</span></span></span><br><span class="line"><span class="params">  <span class="keyword">struct</span> epoll_event *events, <span class="comment">// 空event数组，用于接收就绪的FD</span></span></span><br><span class="line"><span class="params">  <span class="type">int</span> maxevents, <span class="comment">// events数组的最大长度</span></span></span><br><span class="line"><span class="params">  <span class="type">int</span> timeout <span class="comment">// 超时时间，-1用不超时；0不阻塞；大于0为阻塞时间</span></span></span><br><span class="line"><span class="params">)</span></span><br></pre></td></tr></tbody></table></figure>
+
+<img src="/2023/11/10/redis-principle/epollSequence.png" alt="epollSequence" style="zoom:50%;">
+
+<p>当FD有数据可读时，调用epoll_wait可以得到通知，但事件通知的模式有两种：</p>
+<ul>
+<li>levelTriggered：简称LT。当FD有数据可读时，会重复通知多次，直至数据处理完成。是Epoll的默认模式</li>
+<li>EdgeTriggered：简称ET。当FD有数据可读时，只会被通知一次，不管数据是否处理完成</li>
+</ul>
+<p>ET模式避免了LT模式可能出现的惊群现象，ET模式最好结合非阻塞IO读取FD数据，相比LT会复杂一些</p>
+<h3 id="信号驱动IO"><a href="#信号驱动IO" class="headerlink" title="信号驱动IO"></a>信号驱动IO</h3><p><strong>信号驱动IO</strong>是与内核建立SIGIO的信号关联并设置回调，当内核有FD就绪时，会发出SIGIO信号通知用户，期间用户应用可以执行其他业务，无需阻塞等待。</p>
+<p>缺陷：</p>
+<ul>
+<li>当有大量IO操作时，信号较多，SIGIO处理函数不能即时处理可能导致信号队列溢出</li>
+<li>而且内核空间与用户空间的频繁信号交互性能也较低</li>
+</ul>
+<h3 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h3><p><strong>异步IO</strong>的整个过程都是非阻塞的，用户进程调用完异步API后就可以去做其他事情，内核等待数据就绪并拷贝到用户空间后才会递交信号，通知用户进程</p>
+<h2 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h2><p>Redis是单线程还是多线程</p>
+<ul>
+<li>如果仅仅是Redis的核心业务部分（命令处理），是单线程</li>
+<li>如果是整个Redis，那么是多线程</li>
+</ul>
+<p>Redis采用单线程的原因：</p>
+<ul>
+<li>抛开持久化不谈，Redis是纯内存操作，执行速度非常快，它的性能瓶颈是网络延迟而不是执行速度，因此多线程并不会带来巨大的性能提升</li>
+<li>多线程会导致过多的上下文切换，带来不必要的开销</li>
+<li>引入多线程会面临线程安全问题，必须要引入线程锁这样的安全手段，实现复杂度增高，而且性能也会大打折扣</li>
+</ul>
+<p>Redis通过IO多路复用来提高网络性能，并且支持各种不同的多路复用实现，并且将这些实现进行封装，提供了统一的高性能事件库API库AE</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// server.c</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(</span></span><br><span class="line"><span class="params">	<span class="type">int</span> argc,</span></span><br><span class="line"><span class="params">  <span class="type">char</span> **argv</span></span><br><span class="line"><span class="params">)</span> {</span><br><span class="line">  <span class="comment">// 初始化服务</span></span><br><span class="line">  initServer();</span><br><span class="line">  <span class="comment">// 开始监听时间循环</span></span><br><span class="line">  aeMain(server.el);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">initServer</span><span class="params">(<span class="type">void</span>)</span> {</span><br><span class="line">  <span class="comment">// 内部调用 aeApiCreate(eventLoop)，类似于epoll_create</span></span><br><span class="line">  server.el = aeCreateEventLoop(</span><br><span class="line">  								server.maxclients + CONFIG_FDSET_INCR);</span><br><span class="line">  <span class="comment">// 监听TCP端口，创建ServerSocket，并得到FD</span></span><br><span class="line">  listenToPort(server.port, &amp;server.ipfd);</span><br><span class="line">  <span class="comment">// 注册 连接处理器，内部会调用aeApiAddevent(&amp;server.ipfd)监听FD</span></span><br><span class="line">  createSocketAcceptHandler(&amp;server.ipfd, acceptTcpHandler);</span><br><span class="line">  <span class="comment">// 注册 ae_api_poll前的处理器</span></span><br><span class="line">  aeSetBeforeSleepProc(server.el, beforeSleep);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">aeMain</span><span class="params">(aeEventLoop *eventLoop)</span> {</span><br><span class="line">  eventLoop -&gt; stop = <span class="number">0</span>;</span><br><span class="line">  <span class="comment">// 循环监听事件</span></span><br><span class="line">  <span class="keyword">while</span> (!eventLoop-&gt;stop) {</span><br><span class="line">    aeProcessEvents(</span><br><span class="line">    	eventLoop,</span><br><span class="line">    	AE_ALL_EVENTS | AE_CALL_BEFORE_SLEEP | AE_CALL_AFTER_SLEEP);</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">aeProcessEvents</span><span class="params">(</span></span><br><span class="line"><span class="params">	aeEventLoop *eventLoop,</span></span><br><span class="line"><span class="params">  <span class="type">int</span> flags</span></span><br><span class="line"><span class="params">)</span> {</span><br><span class="line">  <span class="comment">// 调用前置处理器</span></span><br><span class="line">  eventLoop-&gt;beforesleep(eventLoop);</span><br><span class="line">  <span class="comment">// 等待FD就绪，类似epoll_wait</span></span><br><span class="line">  numevents = aeApiPoll(eventLoop, tvp);</span><br><span class="line">  <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; numevents; j++) {</span><br><span class="line">    <span class="comment">// 遍历处理就绪的FD，调用对应的处理器</span></span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 数据读处理器</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">acceptTcpHandler</span><span class="params">(...)</span> {</span><br><span class="line">  <span class="comment">// 接收socket链接，获取FD</span></span><br><span class="line">  fd = accept(s, sa, len);</span><br><span class="line">  <span class="comment">// 创建connection，关联fd</span></span><br><span class="line">  connection *conn = connCreateSocket();</span><br><span class="line">  conn.fd = fd;</span><br><span class="line">  <span class="comment">// 内部调用aeApiAddEvent(fd, READABLE),</span></span><br><span class="line">  <span class="comment">// 监听socket的FD读事件，并绑定读处理器readQueryFromClient</span></span><br><span class="line">  connSetReadHandler(conn, readQueryFromClient);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">beforeSleep</span><span class="params">(<span class="keyword">struct</span> aeEventLoop *eventLop)</span> {</span><br><span class="line">  <span class="comment">// 定义迭代器，指向serer.clients_pending_write-&gt;head;</span></span><br><span class="line">  listIter li;</span><br><span class="line">  li-&gt;next = server.clients_pending_write-&gt;head;</span><br><span class="line">  li-&gt;direction = AL_START_HEAD;</span><br><span class="line">  <span class="comment">// 循环遍历待写出的client</span></span><br><span class="line">  <span class="keyword">while</span> ((ln = listNext(&amp;li))) {</span><br><span class="line">    <span class="comment">// 内部调用aeApiAddEvent(fd, WRITEABLE), 监听socket的FD读事件</span></span><br><span class="line">    <span class="comment">// 并且绑定写处理器sendReplyToClient，可以把响应写到客户端socket</span></span><br><span class="line">    connSetWriteHandlerWithBarrier(c-&gt;conn, sendReplyToClient, ae_barrier)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<img src="/2023/11/10/redis-principle/RedisNetStruct.png" alt="RedisNetStruc" style="zoom:50%;">
+
+<h3 id="Redis通信协议"><a href="#Redis通信协议" class="headerlink" title="Redis通信协议"></a>Redis通信协议</h3><p>Redis是一个C/S架构的软件，通信一般分为两步（不包括pipeline和PubSub）：</p>
+<ol>
+<li>客户端（client）向服务端（server）发送一条命令</li>
+<li>服务端解析并执行命令，返回响应结果给 客户端</li>
+</ol>
+<p>客户端发送命令的格式、服务端响应结果的格式需要有一个规范，这个规范就是通信协议</p>
+<p>Redis一般采用<strong>RESP</strong>协议</p>
+<h4 id="RESP"><a href="#RESP" class="headerlink" title="RESP"></a>RESP</h4><h5 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h5><p>RESP中，通过首字节的字符来区分不同数据类型，常用的数据类型包括5种：</p>
+<ul>
+<li>单行字符串：首字节是’+’，后面跟上单行字符串，以CRLF(“\r\n”)结尾</li>
+<li>错误（Errors）：首字节是’-‘，与单行字符串格式一样，只是字符串是异常信息</li>
+<li>数值：首字节是”:”，后面跟上数字格式的字符串，以CRLF结尾</li>
+<li>多行字符串：首字节是’$’，标示二进制安全的字符串，最大支持512MB<ul>
+<li>如果大小为0，则表示空字符串：”$0\r\r\n”</li>
+<li>如果大小为-1，则表示不存在：”$-1\r\n”</li>
+</ul>
+</li>
+<li>数组：首字节是’*’，后面跟上数组元素个数，再跟上元素，元素数据类型不限</li>
+</ul>
+<h1 id="Redis内存策略"><a href="#Redis内存策略" class="headerlink" title="Redis内存策略"></a>Redis内存策略</h1><h2 id="Redis内存回收"><a href="#Redis内存回收" class="headerlink" title="Redis内存回收"></a>Redis内存回收</h2><p>单节点Redis的内存大小不宜过大，会影响持久化或主从同步性能</p>
+<p>可以通过修改配置文件来设置Redis的最大内存</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maxmemory 1gb</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当内存使用达到上限时，就无法存储更多数据了</p>
+<h2 id="过期策略"><a href="#过期策略" class="headerlink" title="过期策略"></a>过期策略</h2><p>通过expire命令给Redis的key设置TTL（存活时间）</p>
+<p>当key的TTL到期以后，再次访问name返回的null，说明这个key已经不存在了，对应的内存也得到释放，从而起到内存回收的目的</p>
+<h3 id="过期策略-DB结构"><a href="#过期策略-DB结构" class="headerlink" title="过期策略-DB结构"></a>过期策略-DB结构</h3><p>Redis本身是一个典型的key-value内存存储数据库，因此所有的key、value都保存在Dict结构中。不过在database结构体中，由两个Dict：一个用来记录key-value；另一个用来记录key-TTL</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisDb</span> {</span></span><br><span class="line">  dict *dict; <span class="comment">// 存放所有key及value的地方，也被称为keyspace</span></span><br><span class="line">  dict *expires; <span class="comment">// 存放每一个key及其对应的TTL存活时间，只包含设置了TTL的key</span></span><br><span class="line">  dict *blocking_keys; </span><br><span class="line">  dict *ready_keys; </span><br><span class="line">  dict *watched_keys; </span><br><span class="line">  <span class="type">int</span> id; </span><br><span class="line">  <span class="type">long</span> <span class="type">long</span> avg_ttl; <span class="comment">// 记录平均TTL时长</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> expires_cursor; </span><br><span class="line">  <span class="built_in">list</span> *defrag_later; <span class="comment">// 等待碎片整理的key列表</span></span><br><span class="line">} redisDb;</span><br></pre></td></tr></tbody></table></figure>
+
+<img src="/2023/11/10/redis-principle/RedisDBStruct.png" alt="RedisDBStruct" style="zoom:50%;">
+
+<h3 id="过期策略-惰性删除"><a href="#过期策略-惰性删除" class="headerlink" title="过期策略-惰性删除"></a>过期策略-惰性删除</h3><p><strong>惰性删除</strong>：顾名思义并不是在TTL到期后就立刻删除，而是在访问一个key的时候，检查该key的存活时间，如果已经过期才执行删除</p>
+<h3 id="过期策略-周期删除"><a href="#过期策略-周期删除" class="headerlink" title="过期策略-周期删除"></a>过期策略-周期删除</h3><p><strong>周期删除</strong>：通过一个定时任务，周期性的<strong>抽样部分过期的key</strong>，然后执行删除。执行周期由两种：</p>
+<ul>
+<li>Redis会设置一个定时任务serverCron()，按照server.hz的频率来执行过期key清理，模式为SLOW</li>
+<li>Redis的每个事件循环前会调用beforeSleep()函数，执行过期key清理，模式为FAST</li>
+</ul>
+<p>SLOW模式规则：</p>
+<ol>
+<li>执行频率受到server.hz影响，默认为10，即每秒执行10次，每个执行周期100ms</li>
+<li>执行清理耗时不超过一次执行周期的25%</li>
+<li>逐个遍历db，逐个遍历db中的bucket，抽取20个key判断是否过期</li>
+<li>如果没达到时间上限（25ms）并且过期key比例大于10%，在进行一次抽样，否则结束</li>
+</ol>
+<p>FAST模式规则：</p>
+<ol>
+<li>执行频率受beforeSleep()调用频率影响，但两次FAST模式间隔不低于2ms</li>
+<li>执行清理耗时不超过1ms</li>
+<li>逐个遍历db，逐个遍历db中的bucket，抽取20个key判断是否过期</li>
+<li>如果没达到时间上限（1ms）并且过期key比例大于10%，在进行一次抽样，否则结束</li>
+</ol>
+<h2 id="淘汰策略"><a href="#淘汰策略" class="headerlink" title="淘汰策略"></a>淘汰策略</h2><p><strong>内存淘汰</strong>：当Redis内存使用达到设置的阈值时，Redis主动挑选<strong>部分key</strong>删除以释放更多内存</p>
+<p>Redis支持8种不同策略来选择要删除的key：</p>
+<ul>
+<li>noeviction：不淘汰任何key，但是内存满了不允许写入新数据，默认就是这种策略</li>
+<li>volatile-ttl：对设置了ttl的key，比较key的剩余TTL值，TTL越小越先被淘汰</li>
+<li>allkeys-random：对全体key，随机进行淘汰。也就是直接从db-&gt;dict中随机选择</li>
+<li>volatile-random：对设置了TTL的key，随机进行淘汰。也就是从db-&gt;expires中随机挑选</li>
+<li>allkeys-lru：对全体key，基于LRU算法进行淘汰</li>
+<li>volatile-lru：对设置了TTL的key，基于LRU算法进行淘汰</li>
+<li>allkeys-lfu：对全体key，基于LFU算法进行淘汰</li>
+<li>volatile-lfu：对设置了TTL的key，基于LFI算法进行淘汰</li>
+</ul>
+<p><strong>LRU（Least Recently Used）</strong>，最少最近使用，用当前时间减去最后一次访问时间，这个值越大则淘汰优先级越高</p>
+<p><strong>LFU （Least Frequently Used）</strong>，最少频率使用，会统计每个key的访问频率，值越小淘汰优先级越高</p>
+<p>LFU的访问次数之所以叫做<strong>逻辑访问次数</strong>，是因为并不是每次key被访问都计数，而是通过运算：</p>
+<ol>
+<li>生成0~1之间的随机数R</li>
+<li>计算1/(旧次数*lfu_log_factor+1)，记录为P，lfu_log_factor默认为10</li>
+<li>如果R&lt;P，则计数器+1，且最大不超过255</li>
+<li>访问次数会随着时间衰减，距离上一次访问时间每隔lfu_decay_time分钟（默认1），计数器-1</li>
+</ol>
+<img src="/2023/11/10/redis-principle/expireMethod.png" alt="expireMethod" style="zoom:50%;">
+</body></html>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaWeb/" rel="tag"># JavaWeb</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/11/03/AspectJ/" rel="prev" title="AOP">
+      <i class="fa fa-chevron-left"></i> AOP
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">Redis数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2SDS"><span class="nav-number">1.1.</span> <span class="nav-text">动态字符串SDS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">1.1.1.</span> <span class="nav-text">优点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IntSet"><span class="nav-number">1.2.</span> <span class="nav-text">IntSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dict"><span class="nav-number">1.3.</span> <span class="nav-text">Dict</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dict%E7%9A%84%E6%89%A9%E5%AE%B9"><span class="nav-number">1.3.1.</span> <span class="nav-text">Dict的扩容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dict%E7%9A%84%E6%94%B6%E7%BC%A9"><span class="nav-number">1.3.2.</span> <span class="nav-text">Dict的收缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dict%E7%9A%84rehash"><span class="nav-number">1.3.3.</span> <span class="nav-text">Dict的rehash</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZipList"><span class="nav-number">1.4.</span> <span class="nav-text">ZipList</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Encoding%E7%BC%96%E7%A0%81"><span class="nav-number">1.4.1.</span> <span class="nav-text">Encoding编码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QuickList"><span class="nav-number">1.5.</span> <span class="nav-text">QuickList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SkipList"><span class="nav-number">1.6.</span> <span class="nav-text">SkipList</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">1.6.1.</span> <span class="nav-text">特点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RedisObject"><span class="nav-number">1.7.</span> <span class="nav-text">RedisObject</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#String"><span class="nav-number">1.7.1.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List"><span class="nav-number">1.7.2.</span> <span class="nav-text">List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set"><span class="nav-number">1.7.3.</span> <span class="nav-text">Set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZSet"><span class="nav-number">1.7.4.</span> <span class="nav-text">ZSet</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash"><span class="nav-number">1.8.</span> <span class="nav-text">Hash</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">Redis网络模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4%E5%92%8C%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4"><span class="nav-number">2.1.</span> <span class="nav-text">用户空间和内核空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%BB%E5%A1%9EIO"><span class="nav-number">2.2.</span> <span class="nav-text">阻塞IO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E9%98%BB%E5%A1%9EIO"><span class="nav-number">2.3.</span> <span class="nav-text">非阻塞IO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="nav-number">2.4.</span> <span class="nav-text">IO多路复用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#select"><span class="nav-number">2.4.1.</span> <span class="nav-text">select</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#poll"><span class="nav-number">2.4.2.</span> <span class="nav-text">poll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#epoll"><span class="nav-number">2.4.3.</span> <span class="nav-text">epoll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%A9%B1%E5%8A%A8IO"><span class="nav-number">2.4.4.</span> <span class="nav-text">信号驱动IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5IO"><span class="nav-number">2.4.5.</span> <span class="nav-text">异步IO</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-number">2.5.</span> <span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.5.1.</span> <span class="nav-text">Redis通信协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RESP"><span class="nav-number">2.5.1.1.</span> <span class="nav-text">RESP</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.5.1.1.1.</span> <span class="nav-text">数据类型</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E5%86%85%E5%AD%98%E7%AD%96%E7%95%A5"><span class="nav-number">3.</span> <span class="nav-text">Redis内存策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6"><span class="nav-number">3.1.</span> <span class="nav-text">Redis内存回收</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5"><span class="nav-number">3.2.</span> <span class="nav-text">过期策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5-DB%E7%BB%93%E6%9E%84"><span class="nav-number">3.2.1.</span> <span class="nav-text">过期策略-DB结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5-%E6%83%B0%E6%80%A7%E5%88%A0%E9%99%A4"><span class="nav-number">3.2.2.</span> <span class="nav-text">过期策略-惰性删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5-%E5%91%A8%E6%9C%9F%E5%88%A0%E9%99%A4"><span class="nav-number">3.2.3.</span> <span class="nav-text">过期策略-周期删除</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5"><span class="nav-number">3.3.</span> <span class="nav-text">淘汰策略</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">MANVND</p>
+  <div class="site-description" itemprop="description">There is no royal road to learning</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">MANVND</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
